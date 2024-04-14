@@ -18,7 +18,8 @@
 [LibraryClasses]
   UefiBootServicesTableLib
   UefiRuntimeServicesTableLib
-  UefiDriverEntryPoint
+  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+
   DebugLib
   PrintLib
 
