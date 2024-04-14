@@ -210,11 +210,11 @@ TakeScreenshot (
             Status = gRT->GetTime(&Time, NULL);
             if (!EFI_ERROR(Status)) {
                 // Set file name to current day and time
-                UnicodeSPrint(FileName, 26, L"%02d.%02d.%02d.%02d.%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
+                UnicodeSPrint(FileName, 64, L"%02d.%02d.%02d.%02d.%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
             }
             else {
                 // Set file name to scrnshot.png
-                UnicodeSPrint(FileName, 26, L"scrnshot.png");
+                UnicodeSPrint(FileName, 64, L"scrnshot.png");
             }
             
             // Allocate memory for screenshot
