@@ -172,7 +172,7 @@ TakeScreenshot (
     EFI_HANDLE *HandleBuffer = NULL;
     UINT32     ScreenWidth;
     UINT32     ScreenHeight;
-    CHAR16     FileName[64]; // 0-terminated 8.3 file name
+    CHAR16     FileName[2+1+2+1+2+1+2+1+2+1+3+1]; // 0-terminated 8.3 file name
     EFI_TIME   Time;
     UINTN      i, j;
 
@@ -210,11 +210,11 @@ TakeScreenshot (
             Status = gRT->GetTime(&Time, NULL);
             if (!EFI_ERROR(Status)) {
                 // Set file name to current day and time
-                UnicodeSPrint(FileName, 32, L"%02d-%02d%_02d:%02d:%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
+                UnicodeSPrint(FileName, 26, L"%02d-%02d%_02d:%02d:%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
             }
             else {
                 // Set file name to scrnshot.png
-                UnicodeSPrint(FileName, 32, L"scrnshot.png");
+                UnicodeSPrint(FileName, 26, L"scrnshot.png");
             }
             
             // Allocate memory for screenshot
