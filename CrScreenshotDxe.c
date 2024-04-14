@@ -172,7 +172,7 @@ TakeScreenshot (
     EFI_HANDLE *HandleBuffer = NULL;
     UINT32     ScreenWidth;
     UINT32     ScreenHeight;
-    CHAR16     FileName; // 0-terminated 8.3 file name
+    CHAR     FileName; // 0-terminated 8.3 file name
     EFI_TIME   Time;
     UINTN      i, j;
 
