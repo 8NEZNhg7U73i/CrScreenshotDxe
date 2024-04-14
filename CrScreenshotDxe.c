@@ -73,17 +73,15 @@ FindWritableFs (
             }
             
             // Try opening a file for writing
-            Status = Fs->Open(Fs, &File, L"test\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
+            Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
             if (EFI_ERROR (Status)) {
                 DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
                 continue;
             }
             
             // Writable FS found
-            /*
-            Fs->Delete(File);
-            */
             *WritableFs = Fs;
+            Fs->Delete(File);
             Status = EFI_SUCCESS;
             break;
         }
@@ -174,7 +172,7 @@ TakeScreenshot (
     EFI_HANDLE *HandleBuffer = NULL;
     UINT32     ScreenWidth;
     UINT32     ScreenHeight;
-    CHAR16     FileName[2+1+2+1+2+1+2+1+2+1+3+1]; // 0-terminated 8.3 file name
+    CHAR16     FileName[255]; // 0-terminated 8.3 file name
     EFI_TIME   Time;
     UINTN      i, j;
 
@@ -212,11 +210,11 @@ TakeScreenshot (
             Status = gRT->GetTime(&Time, NULL);
             if (!EFI_ERROR(Status)) {
                 // Set file name to current day and time
-                UnicodeSPrint(FileName, 64, L"%02d-%02d-%02d_%02d_%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
+                UnicodeSPrint(FileName, 255, L"screenshot\\%02d-%02d-%02d_%02d_%02d.png", Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second);
             }
             else {
                 // Set file name to scrnshot.png
-                UnicodeSPrint(FileName, 64, L"scrnshot.png");
+                UnicodeSPrint(FileName, 255, L"screenshot\\scrnshot.png");
             }
             
             // Allocate memory for screenshot
