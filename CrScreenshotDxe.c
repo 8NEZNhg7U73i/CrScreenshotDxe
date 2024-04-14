@@ -80,8 +80,10 @@ FindWritableFs (
             }
             
             // Writable FS found
+            /*
             Fs->Delete(File);
             *WritableFs = Fs;
+            */
             Status = EFI_SUCCESS;
             break;
         }
