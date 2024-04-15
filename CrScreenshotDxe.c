@@ -34,9 +34,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "lodepng.h" //PNG encoding library
 
-STATIC
-EFI_GUID
-
 EFI_STATUS
 EFIAPI
 FindWritableFs (
