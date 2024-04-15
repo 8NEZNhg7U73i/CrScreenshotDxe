@@ -138,8 +138,8 @@ ShowStatus (
         // Draw the status square
         GraphicsOutput->Blt(GraphicsOutput, Square, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
         
-        // Wait 500ms
-        gBS->Stall(500*1000);
+        // Wait 100ms
+        gBS->Stall(100*1000);
         
         // Restore the backup
         GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
