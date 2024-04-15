@@ -316,7 +316,7 @@ CrScreenshotDxeEntry (
     // Set keystroke to be RCtrl+F12
     SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F1;
     SimpleTextInExKeyStrokeRight.Key.UnicodeChar = 0;
-    SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_Right_CONTROL_PRESSED;
+    SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_CONTROL_PRESSED;
     SimpleTextInExKeyStrokeRight.KeyState.KeyToggleState = 0;
 
 
