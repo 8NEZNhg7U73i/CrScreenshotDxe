@@ -99,7 +99,7 @@ ShowStatus (
     )
 {
     // Determines the size of status square
-    #define STATUS_SQUARE_SIDE 50
+    #define STATUS_SQUARE_SIDE 75
 
     UINTN        HandleCount;
     EFI_HANDLE   *HandleBuffer = NULL;
