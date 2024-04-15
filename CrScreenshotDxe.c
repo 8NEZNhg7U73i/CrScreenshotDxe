@@ -312,13 +312,13 @@ CrScreenshotDxeEntry (
     SimpleTextInExKeyStroke.KeyState.KeyToggleState = 0;
 
     // Set keystroke to be LCtrl+F12
-    SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F1;
+    SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F6;
     SimpleTextInExKeyStrokeLeft.Key.UnicodeChar = 0;
     SimpleTextInExKeyStrokeLeft.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED;
     SimpleTextInExKeyStrokeLeft.KeyState.KeyToggleState = 0;
 
     // Set keystroke to be RCtrl+F12
-    SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F1;
+    SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F6;
     SimpleTextInExKeyStrokeRight.Key.UnicodeChar = 0;
     SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_CONTROL_PRESSED;
     SimpleTextInExKeyStrokeRight.KeyState.KeyToggleState = 0;
