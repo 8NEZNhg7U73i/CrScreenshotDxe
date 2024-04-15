@@ -298,11 +298,18 @@ CrScreenshotDxeEntry (
     UINTN                             HandleCount = 0;
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
+    EFI_KEY_DATA                      SimpleTextInExKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
+
+    // Set keystroke to be LCtrl+LAlt+F12
+    SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
+    SimpleTextInExKeyStroke.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStroke.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED | EFI_LEFT_ALT_PRESSED;
+    SimpleTextInExKeyStroke.KeyState.KeyToggleState = 0;
 
     // Set keystroke to be LCtrl+F12
     SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F1;
@@ -352,6 +359,19 @@ CrScreenshotDxeEntry (
                 Installed = TRUE;
             } else {
                 DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+            }
+
+            // Register key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStroke,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
         }
 
