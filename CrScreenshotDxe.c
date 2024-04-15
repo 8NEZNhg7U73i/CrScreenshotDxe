@@ -302,7 +302,7 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
-    EFI_KET_DATA                      SimpleTextInExKeyStrokeRight;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
