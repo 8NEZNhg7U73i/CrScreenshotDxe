@@ -68,18 +68,32 @@ FindWritableFs (
             }
             
             // Try opening a file for writing
-            Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
-            if (EFI_ERROR (Status)) {
-                DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
-                continue;
+            if (!(Fs)) {
+                Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
+                if (EFI_ERROR (Status)) {
+                    DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
+                    continue;
+                }
+                
+                // Writable FS found
+                *WritableFs = Fs;
+                Fs->Delete(File);
+            } else {
+                Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
+                if (EFI_SUCCESS (Status)) {
+                    DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
+                    continue;
+                }
+                
+                // Writable FS found
+                *WritableFs = Fs;
+                Fs->Delete(File);
+                Status = EFI_ERROR;
+                break;
             }
-            
-            // Writable FS found
-            *WritableFs = Fs;
-            Fs->Delete(File);
-            Status = EFI_SUCCESS;
-            break;
         }
+        Status = EFI_SUCCESS;
+        break;
     }
     
     // Free memory
