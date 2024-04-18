@@ -34,6 +34,66 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "lodepng.h" //PNG encoding library
 
+
+EFI_STATUS
+EFIAPI
+ShowStatus (
+    IN UINT8 Red, 
+    IN UINT8 Green, 
+    IN UINT8 Blue
+    )
+{
+    // Determines the size of status square
+    #define STATUS_SQUARE_SIDE 50
+
+    UINTN        HandleCount;
+    EFI_HANDLE   *HandleBuffer = NULL;
+    EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
+    UINTN i;
+    
+    // Locate all instances of GOP
+    EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+    if (EFI_ERROR (Status)) {
+        DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
+        return EFI_UNSUPPORTED;
+    }
+    
+    // Set square color
+    for (i = 0 ; i < STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE; i++) {
+        Square[i].Blue = Blue;
+        Square[i].Green = Green;
+        Square[i].Red = Red;
+        Square[i].Reserved = 0x00;
+    }
+    
+    // For each GOP instance
+    for (i = 0; i < HandleCount; i ++) {
+        // Handle protocol
+        Status = gBS->HandleProtocol(HandleBuffer[i], &gEfiGraphicsOutputProtocolGuid, (VOID **) &GraphicsOutput);
+        if (EFI_ERROR (Status)) {
+            DEBUG((-1, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
+            continue;
+        }
+            
+        // Backup current image
+        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+        
+        // Draw the status square
+        GraphicsOutput->Blt(GraphicsOutput, Square, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+        
+        // Wait 100ms
+        gBS->Stall(100*1000);
+        
+        // Restore the backup
+        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+    }
+    
+    return EFI_SUCCESS;
+}
+
+
 EFI_STATUS
 EFIAPI
 FindWritableFs (
@@ -104,64 +164,6 @@ FindWritableFs (
     }
     
     return Status;
-}
-
-EFI_STATUS
-EFIAPI
-ShowStatus (
-    IN UINT8 Red, 
-    IN UINT8 Green, 
-    IN UINT8 Blue
-    )
-{
-    // Determines the size of status square
-    #define STATUS_SQUARE_SIDE 50
-
-    UINTN        HandleCount;
-    EFI_HANDLE   *HandleBuffer = NULL;
-    EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
-    UINTN i;
-    
-    // Locate all instances of GOP
-    EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
-    if (EFI_ERROR (Status)) {
-        DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
-        return EFI_UNSUPPORTED;
-    }
-    
-    // Set square color
-    for (i = 0 ; i < STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE; i++) {
-        Square[i].Blue = Blue;
-        Square[i].Green = Green;
-        Square[i].Red = Red;
-        Square[i].Reserved = 0x00;
-    }
-    
-    // For each GOP instance
-    for (i = 0; i < HandleCount; i ++) {
-        // Handle protocol
-        Status = gBS->HandleProtocol(HandleBuffer[i], &gEfiGraphicsOutputProtocolGuid, (VOID **) &GraphicsOutput);
-        if (EFI_ERROR (Status)) {
-            DEBUG((-1, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
-            continue;
-        }
-            
-        // Backup current image
-        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
-        
-        // Draw the status square
-        GraphicsOutput->Blt(GraphicsOutput, Square, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
-        
-        // Wait 100ms
-        gBS->Stall(100*1000);
-        
-        // Restore the backup
-        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
-    }
-    
-    return EFI_SUCCESS;
 }
 
 
