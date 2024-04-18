@@ -138,6 +138,7 @@ FindWritableFs (
                 // Writable FS found
                 *WritableFs = Fs;
                 Fs->Delete(File);
+                Status = EFI_SUCCESS;
                 ShowStatus(0xFF, 0x7F, 0x00); //Yellow
             } else {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
@@ -154,8 +155,6 @@ FindWritableFs (
                 break;
             }
         }
-        Status = EFI_SUCCESS;
-        break;
     }
     
     // Free memory
