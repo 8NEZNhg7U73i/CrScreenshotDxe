@@ -160,8 +160,9 @@ FindWritableFs (
     if (HandleBuffer) {
         gBS->FreePool(HandleBuffer);
     }
-    
-    return Status;
+    if (*WritableFs != NULL) {
+        return Status = EFI_SUCCESS;
+    }
 }
 
 
