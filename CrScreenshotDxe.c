@@ -150,8 +150,8 @@ FindWritableFs (
                 *WritableFs = Fs;
                 Fs->Delete(File);
                 Status = EFI_ABORTED;
-                break;
                 ShowStatus(0xFF, 0x00, 0x7F); //Yellow
+                break;
             }
         }
         Status = EFI_SUCCESS;
