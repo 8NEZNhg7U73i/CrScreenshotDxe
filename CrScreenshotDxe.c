@@ -163,6 +163,8 @@ ShowStatus (
 }
 
 
+    EFI_STATUS FsStatus;
+    FsStatus = EFI_ABORTED;
 EFI_STATUS
 EFIAPI
 TakeScreenshot (
