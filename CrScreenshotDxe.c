@@ -193,6 +193,7 @@ ShowStatus (
             }
         }
     }
+    return FsStatus;
 EFI_STATUS
 EFIAPI
 TakeScreenshot (
