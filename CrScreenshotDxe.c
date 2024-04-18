@@ -78,6 +78,7 @@ FindWritableFs (
                 // Writable FS found
                 *WritableFs = Fs;
                 Fs->Delete(File);
+                ShowStatus(0xFF, 0x7F, 0x00); //Yellow
             } else {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
@@ -90,6 +91,7 @@ FindWritableFs (
                 Fs->Delete(File);
                 Status = EFI_ABORTED;
                 break;
+                ShowStatus(0xFF, 0x00, 0x7F); //Yellow
             }
         }
         Status = EFI_SUCCESS;
