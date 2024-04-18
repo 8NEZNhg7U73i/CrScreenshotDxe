@@ -91,9 +91,9 @@ FindWritableFs (
                 Status = EFI_ABORTED;
                 break;
             }
-            Status = EFI_SUCCESS;
-            break;
         }
+        Status = EFI_SUCCESS;
+        break;
     }
     
     // Free memory
