@@ -52,8 +52,6 @@ ShowStatus (
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
     UINTN i;
-    EFI_STATUS FsStatus;
-    FsStatus = EFI_ABORTED;
     
     // Locate all instances of GOP
     EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
@@ -105,6 +103,8 @@ FindWritableFs (
     EFI_HANDLE *HandleBuffer = NULL;
     UINTN      HandleCount;
     UINTN      i;
+    EFI_STATUS FsStatus;
+    FsStatus = EFI_ABORTED;
     
     // Locate all the simple file system devices in the system
     EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiSimpleFileSystemProtocolGuid, NULL, &HandleCount, &HandleBuffer);
