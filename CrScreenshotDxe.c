@@ -52,6 +52,7 @@ ShowStatus (
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
     UINTN i;
+    EFI_STATUS FsStatus = EFI_ABORTED;
     
     // Locate all instances of GOP
     EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
@@ -137,7 +138,7 @@ FindWritableFs (
                     // Writable FS found
                     *WritableFs = Fs;
                     Fs->Delete(File);
-                    Status = EFI_SUCCESS;
+                    FsStatus = EFI_SUCCESS;
                     ShowStatus(0xFF, 0x7F, 0x00); //Yellow
                 }
             } else {
@@ -149,7 +150,7 @@ FindWritableFs (
                     // Writable FS found
                     // *WritableFs = Fs;
                     Fs->Delete(File);
-                    Status = EFI_ABORTED;
+                    FsStatus = EFI_ABORTED;
                     ShowStatus(0xFF, 0x00, 0x7F); //Yellow
                 }
             }
@@ -160,10 +161,7 @@ FindWritableFs (
     if (HandleBuffer) {
         gBS->FreePool(HandleBuffer);
     }
-    if (*WritableFs != NULL) {
-        Status = EFI_SUCCESS;
-        return Status;
-    }
+    return FsStatus;
 }
 
 
