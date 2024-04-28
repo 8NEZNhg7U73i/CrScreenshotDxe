@@ -315,6 +315,8 @@ CrScreenshotDxeEntry (
     EFI_KEY_DATA                      SimpleTextInExKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
@@ -322,20 +324,32 @@ CrScreenshotDxeEntry (
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
     SimpleTextInExKeyStroke.Key.UnicodeChar = 0;
-    SimpleTextInExKeyStroke.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED | EFI_LEFT_ALT_PRESSED;
+    SimpleTextInExKeyStroke.KeyState.KeyShiftState = EFI_LEFT_CONTROL_PRESSED | EFI_LEFT_ALT_PRESSED;
     SimpleTextInExKeyStroke.KeyState.KeyToggleState = 0;
 
-    // Set keystroke to be LCtrl+F12
-    SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F6;
+    // Set keystroke to be LCtrl+F2
+    SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F2;
     SimpleTextInExKeyStrokeLeft.Key.UnicodeChar = 0;
-    SimpleTextInExKeyStrokeLeft.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED;
+    SimpleTextInExKeyStrokeLeft.KeyState.KeyShiftState = EFI_LEFT_CONTROL_PRESSED;
     SimpleTextInExKeyStrokeLeft.KeyState.KeyToggleState = 0;
 
-    // Set keystroke to be RCtrl+F12
-    SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F6;
+    // Set keystroke to be RCtrl+F10
+    SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F10;
     SimpleTextInExKeyStrokeRight.Key.UnicodeChar = 0;
-    SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_CONTROL_PRESSED;
+    SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_RIGHT_CONTROL_PRESSED;
     SimpleTextInExKeyStrokeRight.KeyState.KeyToggleState = 0;
+
+    // Set keystroke to be LShift+F4
+    SimpleTextInExKeyStrokeLeftShift.Key.ScanCode = SCAN_F4;
+    SimpleTextInExKeyStrokeLeftShift.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeLeftShift.KeyState.KeyShiftState = EFI_LEFT_SHIFT_PRESSED;
+    SimpleTextInExKeyStrokeLeftShift.KeyState.KeyToggleState = 0;
+
+    // Set keystroke to be RShift+F8
+    SimpleTextInExKeyStrokeRightShift.Key.ScanCode = SCAN_F8;
+    SimpleTextInExKeyStrokeRightShift.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeRightShift.KeyState.KeyShiftState = EFI_RIGHT_SHIFT_PRESSED;
+    SimpleTextInExKeyStrokeRightShift.KeyState.KeyToggleState = 0;
 
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
@@ -379,6 +393,32 @@ CrScreenshotDxeEntry (
             Status = SimpleTextInEx->RegisterKeyNotify (
                     SimpleTextInEx,
                     &SimpleTextInExKeyStroke,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Left Shift key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeLeftShift,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Right Shift key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeRightShift,
                     TakeScreenshot,
                     &SimpleTextInExHandle
                     );
