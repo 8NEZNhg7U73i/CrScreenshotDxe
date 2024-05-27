@@ -442,7 +442,7 @@ CrScreenshotDxeEntry (
         }
 
     if (!Installed) {
-        Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+        Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
         if (!Status==EFI_SUCCESS) {
             DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status));
         } else {
@@ -459,7 +459,7 @@ CrScreenshotDxeEntry (
                 // Register Left key notification function
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
-                        &SimpleTextExKeyStrokeLeft,
+                        &SimpleTextKeyStrokeLeft,
                         TakeScreenshot,
                         &SimpleTextInHandle
                         );
