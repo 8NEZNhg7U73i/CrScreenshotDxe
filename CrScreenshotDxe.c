@@ -326,7 +326,7 @@ CrScreenshotDxeEntry (
 
     // Set keystroke to be F1
     SimpleTextInKeyStroke.key.ScanCode = SCAN_F1;
-    SimpleTextInKeyStroke.key.UnicodeChar = "M";
+    SimpleTextInKeyStroke.key.UnicodeChar = 'M';
 
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
