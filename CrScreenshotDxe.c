@@ -448,7 +448,7 @@ CrScreenshotDxeEntry (
         } else {
             // For each instance
             for (Index = 0; Index < HandleCount; Index++) {
-                Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputProtocolGuid, (VOID **) &SimpleTextIn);
+                Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
 
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
