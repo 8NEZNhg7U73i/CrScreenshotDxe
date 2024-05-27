@@ -459,7 +459,7 @@ CrScreenshotDxeEntry (
                 // Register Left key notification function
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
-                        &SimpleTextKeyStrokeLeft,
+                        &SimpleTextInKeyStroke,
                         TakeScreenshot,
                         &SimpleTextInHandle
                         );
