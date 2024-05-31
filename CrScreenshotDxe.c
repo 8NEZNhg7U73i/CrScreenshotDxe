@@ -469,7 +469,7 @@ CrScreenshotDxeEntry (
                     Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &SimpleTextInKeyStroke);
                     if (SimpleTextInKeyStroke.ScanCode == SCAN_F1 && (SimpleTextInKeyStroke.UnicodeChar == 'm' || SimpleTextInKeyStroke.UnicodeChar == 'M'))
                     {
-                        TakeScreenshot(SimpleTextInExKeyStroke);
+                        TakeScreenshot(&SimpleTextInExKeyStroke);
                         Print(L"test\n");
                     }
                 }
