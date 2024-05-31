@@ -25,6 +25,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Uefi.h>
 #include <Library/DebugLib.h>
 #include <Library/PrintLib.h>
+#include <Library/UefiLib.h>
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
