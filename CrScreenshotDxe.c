@@ -313,22 +313,20 @@ CrScreenshotDxeEntry (
     UINTN                             HandleCount = 0;
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
+    EFI_INPUT_KEY                     SimpleTextInKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
-    EFI_INPUT_KEY SimpleTextInKeyStroke;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
-    EFI_SIMPLE_TEXT_INPUT_2_PROTOCOL    *SimpleTextIn;
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
 
     // Set keystroke to be F1
-    /*
     SimpleTextInKeyStroke.Key.ScanCode = SCAN_F1;
     SimpleTextInKeyStroke.Key.UnicodeChar = 'M';
-    */
 
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
@@ -462,6 +460,18 @@ CrScreenshotDxeEntry (
                 Print(L"%d-good\n", Index);
                 // Register Left key notification function
                 ShowStatus(0xFF, 0xFF, 0xFF); // White
+                Status = gBS->CreateEvent(
+                    EVT_NOTIFY_WAIT,           // Type
+                    TPL_NOTIFY,                // NotifyTpl
+                    TakeScreenshot,            // NotifyFunction
+                    SimpleTextInKeyStroke,              // NotifyContext
+                    &(SimpleInput->WaitForKey) // Event
+                );
+                if (EFI_ERROR(Status))
+                {
+                    return Status;
+                }
+                /*
                 while (1)
                 {
                     Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Index);
@@ -469,13 +479,13 @@ CrScreenshotDxeEntry (
                     if (SimpleTextInKeyStroke.ScanCode == SCAN_F1)
                     {
                         TakeScreenshot(&SimpleTextInExKeyStroke);
+                        
                         Print(L"test\n");
                     } else 
                     {
                         Print(L"%c\n", SimpleTextInKeyStroke.UnicodeChar);
                     }
                 }
-                /*
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
                         &SimpleTextInKeyStroke,
