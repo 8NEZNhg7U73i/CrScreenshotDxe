@@ -321,7 +321,7 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_HANDLE                        SimpleTextInHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
-    EFI_SIMPLE_TEXT_INPUT_PROTOCOL    *SimpleTextIn;
+    EFI_SIMPLE_TEXT_INPUT_2_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
 
     // Set keystroke to be F1
