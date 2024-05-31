@@ -313,7 +313,7 @@ CrScreenshotDxeEntry (
     UINTN                             HandleCount = 0;
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
-    EFI_INPUT_KEY                     SimpleTextInKeyStroke;
+    EFI_KEY_DATA                     SimpleTextInKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
