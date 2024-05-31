@@ -362,7 +362,7 @@ CrScreenshotDxeEntry (
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!Status==EFI_SUCCESS) {
-        DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextInEx Protocal return %r\n", Index, Status));
+        Print (L"CrScreenshotDxeEntry: locate SimpleTextInEx Protocal return %r\n", Index, Status);
     } else {
 
             // For each instance
@@ -371,7 +371,7 @@ CrScreenshotDxeEntry (
 
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
-                DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status));
+                Print (L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status);
                 continue;
                 }
 
@@ -385,7 +385,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Right key notification function
@@ -411,7 +411,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Left Shift key notification function
@@ -424,7 +424,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Right Shift key notification function
@@ -437,7 +437,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
             }
         }
@@ -446,7 +446,7 @@ CrScreenshotDxeEntry (
         Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
         Print(L"a\n");
         if (!Status==EFI_SUCCESS) {
-            DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status));
+            Print (L"CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status);
         } else {
             // For each instance
             for (Index = 0; Index < HandleCount; Index++) {
@@ -454,7 +454,7 @@ CrScreenshotDxeEntry (
 
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
-                DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status));
+                Print (L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status);
                 continue;
                 }
 
@@ -468,7 +468,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextIn->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextIn->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
             }
         }
