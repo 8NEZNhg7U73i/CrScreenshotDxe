@@ -166,9 +166,7 @@ ShowStatus (
 
 EFI_STATUS
 EFIAPI
-TakeScreenshot (
-    IN EFI_KEY_DATA *KeyData
-    )
+TakeScreenshot()
 {
     EFI_FILE_PROTOCOL *Fs = NULL;
     EFI_FILE_PROTOCOL *File = NULL;
