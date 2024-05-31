@@ -321,13 +321,17 @@ CrScreenshotDxeEntry (
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_HANDLE                        SimpleTextInHandle;
+    EFI_INPUT_KEY SimpleTextInKeyStroke;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     EFI_SIMPLE_TEXT_INPUT_2_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
+    EFI_EVENT KeyEvent;
 
     // Set keystroke to be F1
+    /*
     SimpleTextInKeyStroke.Key.ScanCode = SCAN_F1;
     SimpleTextInKeyStroke.Key.UnicodeChar = 'M';
+    */
 
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
