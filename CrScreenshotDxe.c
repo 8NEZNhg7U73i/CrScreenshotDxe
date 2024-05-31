@@ -166,7 +166,9 @@ ShowStatus (
 
 EFI_STATUS
 EFIAPI
-TakeScreenshot()
+TakeScreenshot (
+    IN EFI_KEY_DATA *KeyData
+    )
 {
     EFI_FILE_PROTOCOL *Fs = NULL;
     EFI_FILE_PROTOCOL *File = NULL;
@@ -322,7 +324,6 @@ CrScreenshotDxeEntry (
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     EFI_SIMPLE_TEXT_INPUT_2_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
-    EFI_EVENT KeyEvent;
 
     // Set keystroke to be F1
     /*
@@ -468,7 +469,7 @@ CrScreenshotDxeEntry (
                     Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &SimpleTextInKeyStroke);
                     if (SimpleTextInKeyStroke.ScanCode == SCAN_F1 && (SimpleTextInKeyStroke.UnicodeChar == 'm' || SimpleTextInKeyStroke.UnicodeChar == 'M'))
                     {
-                        TakeScreenshot;
+                        TakeScreenshot(SimpleTextInExKeyStroke);
                         Print(L"test\n");
                     }
                 }
