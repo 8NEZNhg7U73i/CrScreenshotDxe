@@ -449,6 +449,7 @@ CrScreenshotDxeEntry (
             Print (L"CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Status);
         } else {
             // For each instance
+            Print(L"Count: %d\n", HandleCount);
             for (Index = 0; Index < HandleCount; Index++) {
                 Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
                 Print(L"%d\n", Index);
