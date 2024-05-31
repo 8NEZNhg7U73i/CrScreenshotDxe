@@ -488,6 +488,7 @@ CrScreenshotDxeEntry (
                 } else {
                     Print (L"CrScreenshotDxeEntry: SimpleTextIn->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
+                */
             }
         }
     }
