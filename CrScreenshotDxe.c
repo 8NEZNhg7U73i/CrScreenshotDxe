@@ -443,6 +443,7 @@ CrScreenshotDxeEntry (
 
     if (!Installed) {
         Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+        Print(L"a\n");
         if (!Status==EFI_SUCCESS) {
             DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status));
         } else {
