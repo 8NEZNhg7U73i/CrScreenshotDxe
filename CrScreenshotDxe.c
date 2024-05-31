@@ -319,7 +319,6 @@ CrScreenshotDxeEntry (
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
-    EFI_HANDLE                        SimpleTextInHandle;
     EFI_INPUT_KEY SimpleTextInKeyStroke;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     EFI_SIMPLE_TEXT_INPUT_2_PROTOCOL    *SimpleTextIn;
