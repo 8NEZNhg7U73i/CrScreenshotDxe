@@ -460,6 +460,18 @@ CrScreenshotDxeEntry (
                 }
                 Print(L"%d-good\n", Index);
                 // Register Left key notification function
+                ShowStatus(0xFF, 0xFF, 0xFF); // White
+                while (1)
+                {
+                    Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Index);
+                    Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &SimpleTextInKeyStroke);
+                    if (SimpleTextInKeyStroke.ScanCode == SCAN_F1 & (SimpleTextInKeyStroke.UnicodeChar == 'm' | SimpleTextInKeyStroke.UnicodeChar == 'M'))
+                    {
+                        TakeScreenshot;
+                        Print(L"test\n");
+                    }
+                }
+                /*
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
                         &SimpleTextInKeyStroke,
