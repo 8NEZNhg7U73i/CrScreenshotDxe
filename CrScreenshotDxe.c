@@ -362,7 +362,7 @@ CrScreenshotDxeEntry (
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!Status==EFI_SUCCESS) {
-        Print (L"CrScreenshotDxeEntry: locate SimpleTextInEx Protocal return %r\n", Index, Status);
+        Print (L"CrScreenshotDxeEntry: locate SimpleTextInEx[%d] Protocal return %r\n", Index, Status);
     } else {
 
             // For each instance
@@ -446,7 +446,7 @@ CrScreenshotDxeEntry (
         Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
         Print(L"a\n");
         if (!Status==EFI_SUCCESS) {
-            Print (L"CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status);
+            Print (L"CrScreenshotDxeEntry: locate SimpleTextIn[%d] Protocal return %r\n", Index, Status);
         } else {
             // For each instance
             for (Index = 0; Index < HandleCount; Index++) {
