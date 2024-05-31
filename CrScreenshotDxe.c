@@ -470,6 +470,9 @@ CrScreenshotDxeEntry (
                     {
                         TakeScreenshot(&SimpleTextInExKeyStroke);
                         Print(L"test\n");
+                    } else 
+                    {
+                        Print(L"%c\n", SimpleTextInKeyStroke.UnicodeChar);
                     }
                 }
                 /*
