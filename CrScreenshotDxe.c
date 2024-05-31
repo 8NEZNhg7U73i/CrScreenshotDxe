@@ -454,10 +454,10 @@ CrScreenshotDxeEntry (
                 Print(L"%d\n", Index);
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
-                Print (L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status);
-                continue;
+                    Print(L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status);
+                    continue;
                 }
-
+                Print(L"%d-good\n", Index);
                 // Register Left key notification function
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
@@ -465,6 +465,7 @@ CrScreenshotDxeEntry (
                         TakeScreenshot,
                         &SimpleTextInHandle
                         );
+                Print(L"register\n");
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
