@@ -461,6 +461,7 @@ CrScreenshotDxeEntry (
                 Print(L"%d-good\n", Index);
                 // Register Left key notification function
                 ShowStatus(0xFF, 0xFF, 0xFF); // White
+                /*
                 Status = gBS->CreateEvent(
                     EVT_NOTIFY_WAIT,           // Type
                     TPL_NOTIFY,                // NotifyTpl
@@ -472,7 +473,6 @@ CrScreenshotDxeEntry (
                 {
                     return Status;
                 }
-                /*
                 while (1)
                 {
                     Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Index);
