@@ -357,6 +357,7 @@ CrScreenshotDxeEntry (
     Print(L"HandleCount: %d", HandleCount);
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
+            Print(L"now: ")
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
             Print(L"Status0: %r\n", Status);
             // Get protocol handle
@@ -373,7 +374,7 @@ CrScreenshotDxeEntry (
                     &SimpleTextInExHandle
                     );
             Print(L"Status1: %r\n", Status);
-            
+
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
