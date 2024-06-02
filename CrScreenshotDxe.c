@@ -357,7 +357,7 @@ CrScreenshotDxeEntry (
     Print(L"HandleCount: %d", HandleCount);
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
-            Print(L"now: ")
+            Print(L"now: %d", Index);
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
             Print(L"Status0: %r\n", Status);
             // Get protocol handle
