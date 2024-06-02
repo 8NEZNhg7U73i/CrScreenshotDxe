@@ -333,7 +333,6 @@ CrScreenshotDxeEntry(
     IN EFI_HANDLE ImageHandle,
     IN EFI_SYSTEM_TABLE *SystemTable)
 {
-<<<<<<< HEAD
     EFI_STATUS Status;
     UINTN HandleCount = 0;
     EFI_HANDLE *HandleBuffer = NULL;
@@ -352,22 +351,6 @@ CrScreenshotDxeEntry(
     // Set keystroke to be F1
     SimpleTextInKeyStroke.Key.ScanCode = SCAN_F1;
     SimpleTextInKeyStroke.Key.UnicodeChar = 'M';
-=======
-    EFI_STATUS                        Status;
-    UINTN                             HandleCount = 0;
-    EFI_HANDLE                        *HandleBuffer = NULL;
-    UINTN                             Index;
-    EFI_KEY_DATA                     SimpleTextInKeyStroke;
-    EFI_KEY_DATA                      SimpleTextInExKeyStroke;
-    EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
-    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
-    EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
-    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
-    EFI_HANDLE                        SimpleTextInExHandle;
-    EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
-    EFI_SIMPLE_TEXT_INPUT_PROTOCOL    *SimpleTextIn;
-    BOOLEAN                           Installed = FALSE;
->>>>>>> 1b5bcb25219f60615d2d2c7d626709a10824cc18
 
     // Set keystroke to be F1
     SimpleTextInKeyStroke.Key.ScanCode = SCAN_F1;
