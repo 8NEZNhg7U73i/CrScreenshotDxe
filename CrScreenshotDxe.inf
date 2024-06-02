@@ -21,7 +21,8 @@
   UefiDriverEntryPoint
   DebugLib
   PrintLib
-
+  UefiLib
+  
 [Protocols]
   gEfiGraphicsOutputProtocolGuid
   gEfiSimpleTextInputExProtocolGuid
