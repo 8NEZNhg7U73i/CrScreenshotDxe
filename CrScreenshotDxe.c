@@ -25,6 +25,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Uefi.h>
 #include <Library/DebugLib.h>
 #include <Library/PrintLib.h>
+#include <Library/UefiLib.h>
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
@@ -312,14 +313,13 @@ CrScreenshotDxeEntry (
     UINTN                             HandleCount = 0;
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
-    EFI_KEY_DATA                      SimpleTextInKeyStroke;
+    EFI_KEY_DATA                     SimpleTextInKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStroke;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
-    EFI_HANDLE                        SimpleTextInHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     EFI_SIMPLE_TEXT_INPUT_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
@@ -360,17 +360,14 @@ CrScreenshotDxeEntry (
 
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
-    if (!Status==EFI_SUCCESS) {
-        DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextInEx Protocal return %r\n", Index, Status));
-    } else {
-
-            // For each instance
-            for (Index = 0; Index < HandleCount; Index++) {
-                Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
+    Print(L"HandleCount: %u\n", HandleCount);
+        // For each instance
+        for (Index = 0; Index < HandleCount; Index++) {
+            Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
 
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
-                DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status));
+                Print (L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status);
                 continue;
                 }
 
@@ -384,7 +381,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Right key notification function
@@ -410,7 +407,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Left Shift key notification function
@@ -423,7 +420,7 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
 
                 // Register Right Shift key notification function
@@ -436,38 +433,70 @@ CrScreenshotDxeEntry (
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
             }
         }
 
     if (!Installed) {
         Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+        Print(L"Count: %d\n", HandleCount);
         if (!Status==EFI_SUCCESS) {
-            DEBUG ((-1, "CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Index, Status));
+            Print (L"CrScreenshotDxeEntry: locate SimpleTextIn Protocal return %r\n", Status);
         } else {
             // For each instance
+            Print(L"Count: %d\n", HandleCount);
             for (Index = 0; Index < HandleCount; Index++) {
                 Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
-
+                Print(L"%d\n", Index);
                 // Get protocol handle
                 if (EFI_ERROR (Status)) {
-                DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status));
-                continue;
+                    Print(L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInput returned %r\n", Index, Status);
+                    continue;
                 }
-
+                Print(L"%d-good\n", Index);
                 // Register Left key notification function
+                ShowStatus(0xFF, 0xFF, 0xFF); // White
+                /*
+                Status = gBS->CreateEvent(
+                    EVT_NOTIFY_WAIT,           // Type
+                    TPL_NOTIFY,                // NotifyTpl
+                    TakeScreenshot,            // NotifyFunction
+                    SimpleTextInKeyStroke,              // NotifyContext
+                    &(SimpleInput->WaitForKey) // Event
+                );
+                if (EFI_ERROR(Status))
+                {
+                    return Status;
+                }
+                while (1)
+                {
+                    Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Index);
+                    Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &SimpleTextInKeyStroke);
+                    if (SimpleTextInKeyStroke.ScanCode == SCAN_F1)
+                    {
+                        TakeScreenshot(&SimpleTextInExKeyStroke);
+                        
+                        Print(L"test\n");
+                    } else 
+                    {
+                        Print(L"%c\n", SimpleTextInKeyStroke.UnicodeChar);
+                    }
+                }
                 Status = SimpleTextIn->RegisterKeyNotify (
                         SimpleTextIn,
                         &SimpleTextInKeyStroke,
                         TakeScreenshot,
                         &SimpleTextInHandle
                         );
+                Print(L"register\n");
                 if (!EFI_ERROR (Status)) {
                     Installed = TRUE;
                 } else {
-                    DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextIn->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                    Print (L"CrScreenshotDxeEntry: SimpleTextIn->RegisterKeyNotify[%d] returned %r\n", Index, Status);
                 }
+                */
+            }
         }
     }
 
