@@ -35,3 +35,9 @@
 [BuildOptions]
   MSFT:*_*_*_CC_FLAGS            = /wd4244 /wd4267 /wd4334 /wd4245
   *_*_*_CC_FLAGS                 = -D LODEPNG_UEFI_MODE
+
+[Components]
+  MdeModulePkg/Universal/PCD/Pei/Pcd.inf  {
+   <PcdsFixedAtBuild>
+      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8073d5ff
+  }
