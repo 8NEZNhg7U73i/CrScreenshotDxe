@@ -31,6 +31,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/SimpleTextInEx.h>
 #include <Protocol/SimpleFileSystem.h>
+#include <Library/BaseDebugLibConOut/BaseDebugLibConOut.inf>
 
 #include "lodepng.h" //PNG encoding library
 
