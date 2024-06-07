@@ -326,6 +326,16 @@ CrScreenshotDxeEntry (
     
     CrScreenHandle = NULL;
     gCrScreenShotGuid.Data1 = 0x02e4e4f7;
+    gCrScreenShotGuid.Data2 = 0x38d9;
+    gCrScreenShotGuid.Data3 = 0x4924;
+    gCrScreenShotGuid.Data4[0] = 0xa4;
+    gCrScreenShotGuid.Data4[1] = 0xd7;
+    gCrScreenShotGuid.Data4[2] = 0xec;
+    gCrScreenShotGuid.Data4[3] = 0x6b;
+    gCrScreenShotGuid.Data4[4] = 0x69;
+    gCrScreenShotGuid.Data4[5] = 0x84;
+    gCrScreenShotGuid.Data4[6] = 0x7a;
+    gCrScreenShotGuid.Data4[7] = 0xa3;
     Status = gBS->LocateHandleBuffer(ByProtocol, &gCrScreenShotGuid, NULL, &CrHandleCount, &CrScreenHandle);
     if (!Status == EFI_SUCCESS){
         Status = gBS->InstallProtocolInterface(&CrScreenHandle, &gCrScreenShotGuid, EFI_NATIVE_INTERFACE, NULL);
