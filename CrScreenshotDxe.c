@@ -23,6 +23,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <Uefi.h>
+#include <Libtary/UefiLib.h>
 #include <Library/DebugLib.h>
 #include <Library/PrintLib.h>
 #include <Library/UefiDriverEntryPoint.h>
