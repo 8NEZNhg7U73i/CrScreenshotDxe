@@ -371,7 +371,7 @@ CrScreenshotDxeEntry (
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
         DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
-        return EFI_INVAILD;
+        //return EFI_INVAILD;
     }
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
