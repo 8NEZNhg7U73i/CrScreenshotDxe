@@ -197,7 +197,7 @@ TakeScreenshot (
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
         DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
-        return EFI_INVAILD;
+        return EFI_UNSUPPORTED;
     }
     
     // For each GOP instance
@@ -371,7 +371,7 @@ CrScreenshotDxeEntry (
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
         DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
-        //return EFI_INVAILD;
+        //return EFI_UNSUPPORTED;
     }
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
