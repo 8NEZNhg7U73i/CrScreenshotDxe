@@ -326,7 +326,6 @@ CrScreenshotDxeEntry (
     
     CrScreenHandle = NULL;
     CrScreenShotGuid = {0x02e4e4f7, 0x38d9, 0x4924, {0xec, 0x6b, 0x69, 0x84, 0x7a, 0xa3}};
-    //Status = gBS->LocateProtocol(&CrScreenShotGuid, NULL, &gCrScreenShotInterface);
     Status = gBS->LocateHandleBuffer(ByProtocol, &CrScreenShotGuid, NULL, &CrHandleCount, &CrScreenHandle);
     if (!Status == EFI_SUCCESS){
         Status = gBS->InstallProtocolInterface(&CrScreenHandle, &gCrScreenShotGuid, EFI_NATIVE_INTERFACE, NULL);
@@ -370,6 +369,10 @@ CrScreenshotDxeEntry (
 
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+    if (EFI_ERROR (Status)) {
+        DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
+        return EFI_INVAILD;
+    }
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
