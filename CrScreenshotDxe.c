@@ -320,7 +320,22 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
-
+    EFI_GUID                          gCrScreenShotGuid;
+    EFI_INTERFACE                     gCrScreenShotInterface;
+    EFI_HANDLE                        CrScreenHandle;
+    
+    CrScreenHandle = NULL;
+    CrScreenShotGuid = {0x02e4e4f7, 0x38d9, 0x4924, {0xec, 0x6b, 0x69, 0x84, 0x7a, 0xa3}};
+    Status = gBS->LocateProtocol(&CrScreenShotGuid, NULL, &gCrScreenShotInterface);
+    if (!Status == EFI_SUCCESS){
+        Status = gBS->InstallProtocolInterface(&CrScreenHandle, &gCrScreenShotGuid, EFI_NATIVE_INTERFACE, NULL);
+        if (!Status == EFI_SUCCESS){
+            DEBUG ((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
+        }
+    } else {
+        DEBUG ((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n", Status));
+    }
+    
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
     SimpleTextInExKeyStroke.Key.UnicodeChar = 0;
