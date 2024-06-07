@@ -197,7 +197,7 @@ TakeScreenshot (
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
         DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
-        return EFI_SUCCESS;
+        return EFI_INVAILD;
     }
     
     // For each GOP instance
@@ -321,19 +321,21 @@ CrScreenshotDxeEntry (
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
     EFI_GUID                          gCrScreenShotGuid;
-    EFI_INTERFACE                     gCrScreenShotInterface;
-    EFI_HANDLE                        CrScreenHandle;
+    EFI_HANDLE                        *CrScreenHandle = NULL;
+    UINTN                             CrHandleCount = 0;
     
     CrScreenHandle = NULL;
     CrScreenShotGuid = {0x02e4e4f7, 0x38d9, 0x4924, {0xec, 0x6b, 0x69, 0x84, 0x7a, 0xa3}};
-    Status = gBS->LocateProtocol(&CrScreenShotGuid, NULL, &gCrScreenShotInterface);
+    //Status = gBS->LocateProtocol(&CrScreenShotGuid, NULL, &gCrScreenShotInterface);
+    Status = gBS->LocateHandleBuffer(ByProtocol, &CrScreenShotGuid, NULL, &CrHandleCount, &CrScreenHandle);
     if (!Status == EFI_SUCCESS){
         Status = gBS->InstallProtocolInterface(&CrScreenHandle, &gCrScreenShotGuid, EFI_NATIVE_INTERFACE, NULL);
         if (!Status == EFI_SUCCESS){
             DEBUG ((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         }
     } else {
-        DEBUG ((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n", Status));
+        DEBUG ((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
+        return EFI_ALREADY_STARTED;
     }
     
     // Set keystroke to be LCtrl+LAlt+F12
