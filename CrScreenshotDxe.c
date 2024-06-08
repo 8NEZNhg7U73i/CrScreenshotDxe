@@ -341,8 +341,8 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     EmptyKeyData.Key.UnicodeChar = 0;
     EmptyKeyData.KeyState.KeyShiftState = 0;
     EmptyKeyData.KeyState.KeyToggleState = 0;
-    KeyFuncBuff KeyFuncBuff;
-    KeyFuncBuff = KeyFuncBuff Context;
+    KeyFuncBuff Buff;
+    Buff = KeyFuncBuff Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
@@ -363,10 +363,10 @@ SimpleTextInWaitForKeyStroke(
 {
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
-    KeyFuncBuff KeyFuncBuff;
-    KeyFuncBuff.KeyInput = KeyInput;
-    KeyFuncBuff.KeyNotificationFunction = KeyNotificationFunction;
-    Status = gBS->CreateEvent(EVR_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &KeyFuncBuff, &TimeEvent);
+    KeyFuncBuff Buff;
+    Buff.KeyInput = KeyInput;
+    Buff.KeyNotificationFunction = KeyNotificationFunction;
+    Status = gBS->CreateEvent(EVR_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &Buff, &TimeEvent);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gBS->CreateEvent Failed: %r\n", Status));
         return EFI_OUT_OF_RESOURCES;
