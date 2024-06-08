@@ -305,9 +305,14 @@ TakeScreenshot (
 
 EFI_STATUS
 EFIAPI
-CrScreenshotnull(){
-    return EFI_SUCCESS;
+CrScreenshotnullfunction (){
+  return EFI_SUCCESS;
 }
+
+
+EFI_CR_SCREEN_SHOT_PROTOCOL CrScreenshotnull(){
+    CrScreenshotnullfunction
+};
 
 EFI_STATUS
 EFIAPI
