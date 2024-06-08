@@ -529,6 +529,12 @@ CrScreenshotDxeEntry (
                 DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
         }
+
+        // Show success only when we found at least one working implementation
+        if (Installed)
+        {
+            ShowStatus(0xFF, 0xFF, 0xFF); // White
+        }
     }
 
     if (EFI_ERROR (Status)) {
@@ -595,16 +601,17 @@ CrScreenshotDxeEntry (
                 DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status));
             }
         }
+
+        // Show success only when we found at least one working implementation
+        if (Installed)
+        {
+            ShowStatus(0x00, 0xFF, 0x00); // White
+        }
     }
 
     // Free memory used for handle buffer
     if (HandleBuffer) {
         gBS->FreePool(HandleBuffer);
-    }
-
-    // Show success only when we found at least one working implementation
-    if (Installed) {
-        ShowStatus(0xFF, 0xFF, 0xFF); //White
     }
 
     return EFI_SUCCESS;
