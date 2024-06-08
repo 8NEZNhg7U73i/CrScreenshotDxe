@@ -332,10 +332,10 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
     static EFI_KEY_DATA EmptyKeyData;
-    static EmptyKeyData.Key.ScanCode = 0;
-    static EmptyKeyData.Key.UnicodeChar = 0;
-    static EmptyKeyData.KeyState.KeyShiftState = 0;
-    static EmptyKeyData.KeyState.KeyToggleState = 0;
+    EmptyKeyData.Key.ScanCode = 0;
+    EmptyKeyData.Key.UnicodeChar = 0;
+    EmptyKeyData.KeyState.KeyShiftState = 0;
+    EmptyKeyData.KeyState.KeyToggleState = 0;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
