@@ -324,8 +324,6 @@ CrScreenshotDxeEntry (
     EFI_GUID                          gEfiCrscreenshotDxeGuid;
     EFI_HANDLE                        CrScreenHandle = NULL;
     UINTN                             CrHandleCount = 0;
-    //EFI_CR_SCREEN_SHOT_PROTOCOL       *CrScreenshot;
-    //CrScreenHandle = NULL;
     gEfiCrscreenshotDxeGuid.Data1 = 0x02e4e4f7;
     gEfiCrscreenshotDxeGuid.Data2 = 0x38d9;
     gEfiCrscreenshotDxeGuid.Data3 = 0x4924;
@@ -340,7 +338,6 @@ CrScreenshotDxeEntry (
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
     DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
     if (!Status == EFI_SUCCESS){
-        //Status = gBS->InstallProtocolInterface(CrScreenHandle, &gEfiCrscreenshotDxeGuid, EFI_NATIVE_INTERFACE, &CrScreenshot);
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
         DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         if (!Status == EFI_SUCCESS)
