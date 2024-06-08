@@ -355,7 +355,7 @@ CrScreenshotDxeEntry (
     Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
     if (!Status == EFI_SUCCESS){
         //Status = gBS->InstallProtocolInterface(CrScreenHandle, &gEfiCrscreenshotDxeGuid, EFI_NATIVE_INTERFACE, &CrScreenshot);
-        Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, &CrScreenshotnull, NULL);
+        Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
         Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
         if (!Status == EFI_SUCCESS)
         {
