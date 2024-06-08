@@ -307,7 +307,7 @@ typedef struct KeyFuncBuffStruct{
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
-void WaitKey(IN EFI_EVENT Event, IN VOID *Context)
+void WaitKey (IN EFI_EVENT Event, IN VOID *Context)
 {
     //EFI_EVENT KeyEvent;
     EFI_STATUS Status;
@@ -332,7 +332,7 @@ void WaitKey(IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
-void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
+void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
@@ -352,7 +352,7 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
-EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke(IN EFI_SIMPLE_TEXT_IN_PROTOCOL *This, IN EFI_INPUT_KEY *KeyInput, IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction, OUT VOID **NotifyHandle)
+EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_IN_PROTOCOL *This, IN EFI_INPUT_KEY *KeyInput, IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction, OUT VOID **NotifyHandle)
 {
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
