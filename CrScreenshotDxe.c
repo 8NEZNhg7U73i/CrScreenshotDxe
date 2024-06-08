@@ -309,10 +309,10 @@ typedef struct KeyFuncBuffStruct{
 
 
     extern EFI_KEY_DATA EmptyKeyData;
-    EmptyKeyData.Key.ScanCode = 0;
-    EmptyKeyData.Key.UnicodeChar = 0;
-    EmptyKeyData.KeyState.KeyShiftState = 0;
-    EmptyKeyData.KeyState.KeyToggleState = 0;
+    void EmptyKeyData.Key.ScanCode = 0;
+    void EmptyKeyData.Key.UnicodeChar = 0;
+    void EmptyKeyData.KeyState.KeyShiftState = 0;
+    void EmptyKeyData.KeyState.KeyToggleState = 0;
 
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
