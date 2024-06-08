@@ -342,7 +342,7 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     EmptyKeyData.KeyState.KeyShiftState = 0;
     EmptyKeyData.KeyState.KeyToggleState = 0;
     KeyFuncBuff KeyFuncBuff;
-    KeyFuncBuff = *Context;
+    KeyFuncBuff = *(*Context);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
