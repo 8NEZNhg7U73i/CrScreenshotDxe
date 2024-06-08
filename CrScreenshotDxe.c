@@ -340,6 +340,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_INPUT_PROTOCO
     Buff.KeyInput = KeyInput;
     Buff.KeyNotificationFunction = KeyNotificationFunction;
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &Buff, &TimeEvent);
+    Print(L"Status: %r\n", Status);
     if (!EFI_ERROR (Status)) {
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
         return EFI_OUT_OF_RESOURCES;
@@ -394,12 +395,10 @@ CrScreenshotDxeEntry (
     gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
 
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
-    Print (L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
     if (EFI_ERROR (Status)) {
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
-        Print (L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
         if (!EFI_ERROR (Status)) {
-            Print (L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
+            Print (L"CrScreenshotDxeEntry: gBS->InstallMultipleProtocolInterfaces returned %r\n", Status);
         }
     } else {
         Print (L"CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status);
