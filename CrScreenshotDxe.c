@@ -307,15 +307,19 @@ typedef struct KeyFuncBuffStruct{
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
-void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
+void emptykeydata ()
 {
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
-    static EFI_KEY_DATA EmptyKeyData;
+    extern EFI_KEY_DATA EmptyKeyData;
     EmptyKeyData.Key.ScanCode = 0;
     EmptyKeyData.Key.UnicodeChar = 0;
     EmptyKeyData.KeyState.KeyShiftState = 0;
     EmptyKeyData.KeyState.KeyToggleState = 0;
+}
+
+void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
+{
+    EFI_STATUS Status;
+    EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff = *(VOID **)Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
@@ -527,6 +531,7 @@ CrScreenshotDxeEntry (
     }
 
     if (EFI_ERROR (Status)) {
+        emptykeydata();
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
