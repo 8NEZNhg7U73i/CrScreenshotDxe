@@ -337,7 +337,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_INPUT_PROTOCO
 {
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
-    KeyFuncBuff *Buff;
+    KeyFuncBuff *Buff = NULL;
     Buff->KeyInput = KeyInput;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
