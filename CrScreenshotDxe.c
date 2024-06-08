@@ -34,6 +34,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Protocol/SimpleFileSystem.h>
 
 #include "lodepng.h" //PNG encoding library
+#include "CrScreenshotDxe.h"
 
 EFI_STATUS
 EFIAPI
