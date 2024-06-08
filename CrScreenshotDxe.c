@@ -321,7 +321,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
-    KeyFuncBuff *Buff = *(VOID *)Context;
+    KeyFuncBuff *Buff = (VOID **)Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
     Print(L"ScanCode: %0X\n", Key.ScanCode);
