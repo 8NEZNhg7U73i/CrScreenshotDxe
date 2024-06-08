@@ -307,13 +307,15 @@ typedef struct KeyFuncBuffStruct{
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
+EFI_KEY_DATA EmptyKeyData;
 
-    extern EFI_KEY_DATA EmptyKeyData;
-    void EmptyKeyData.Key.ScanCode = 0;
-    void EmptyKeyData.Key.UnicodeChar = 0;
-    void EmptyKeyData.KeyState.KeyShiftState = 0;
-    void EmptyKeyData.KeyState.KeyToggleState = 0;
-
+void emptykeydata ()
+{
+    EmptyKeyData.Key.ScanCode = 0;
+    EmptyKeyData.Key.UnicodeChar = 0;
+    EmptyKeyData.KeyState.KeyShiftState = 0;
+    EmptyKeyData.KeyState.KeyToggleState = 0;
+}
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
