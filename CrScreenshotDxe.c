@@ -307,31 +307,6 @@ typedef struct KeyFuncBuffStruct{
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
-void WaitKey (IN EFI_EVENT Event, IN VOID *Context)
-{
-    //EFI_EVENT KeyEvent;
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
-    //UINTN        Index;
-    //KeyEvent = gST->ConIn->WaitForKey;
-    //gBS->RaiseTPL((EFI_TPL) TPL_APPLICATION);
-    //Status = gBS->WaitForEvent(1, &KeyEvent, &Index);
-    //Print(L"WaitKey: WaitForEvent: %r\n", Status);
-    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
-    Print(L"WaitKey: ReadKeyStroke: %r\n", Status);
-
-    //Status = gBS->WaitForEvent(1, &KeyEvent, &waitidx);
-    //Print(L"Status: %r\n", Status);
-    //Status = gBS->CheckEvent(KeyEvent);
-    //Print(L"Status: %r\n", Status);
-    Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
-    Print(L"Status: %r\n", Status);
-    if (Status == EFI_SUCCESS) {
-        Print(L"Unicode char: %c\n", Key.UnicodeChar);
-        Print(L"Scan code: %X\n", Key.ScanCode);
-    }
-}
-
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
