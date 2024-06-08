@@ -328,10 +328,10 @@ void WaitKey(IN EFI_EVENT Event, IN VOID *Context)
 }
 
 EFI_KEY_DATA EmptyKeyData;
-KeyData.Key.ScanCode = 0;
-KeyData.Key.UnicodeChar = 0;
-KeyData.KeyState.KeyShiftState = 0;
-KeyData.KeyState.KeyToggleState = 0;
+EmptyKeyData.Key.ScanCode = 0;
+EmptyKeyData.Key.UnicodeChar = 0;
+EmptyKeyData.KeyState.KeyShiftState = 0;
+EmptyKeyData.KeyState.KeyToggleState = 0;
 
 void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
 {
