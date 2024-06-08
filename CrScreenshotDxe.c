@@ -324,6 +324,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     KeyFuncBuff *Buff = *(VOID **)Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
+        Print(L"re\n");
         if ((Buff->KeyInput->UnicodeChar == Key.UnicodeChar) && (Buff->KeyInput->ScanCode == Key.ScanCode)) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
