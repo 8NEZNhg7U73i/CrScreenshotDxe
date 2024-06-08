@@ -14,7 +14,7 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  DcsPkg/screenshot/CrScreenshotDxe.dec
+  #DcsPkg/screenshot/CrScreenshotDxe.dec
 
 [LibraryClasses]
   UefiBootServicesTableLib
@@ -28,7 +28,7 @@
   gEfiGraphicsOutputProtocolGuid
   gEfiSimpleTextInputExProtocolGuid
   gEfiSimpleFileSystemProtocolGuid
-  gEfiCrscreenshotDxeGuid
+  #gEfiCrscreenshotDxeGuid
 
 
 [Depex]
