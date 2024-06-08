@@ -395,7 +395,7 @@ CrScreenshotDxeEntry (
 
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
     DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
-    if (!EFI_ERROR (Status)) {
+    if (EFI_ERROR (Status)) {
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
         DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         if (!EFI_ERROR (Status)) {
