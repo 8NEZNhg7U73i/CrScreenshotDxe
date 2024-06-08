@@ -359,7 +359,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_INPUT_PROTOCO
     KeyFuncBuff Buff;
     Buff.KeyInput = KeyInput;
     Buff.KeyNotificationFunction = KeyNotificationFunction;
-    Status = gBS->CreateEvent(EVR_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &Buff, &TimeEvent);
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &Buff, &TimeEvent);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gBS->CreateEvent Failed: %r\n", Status));
         return EFI_OUT_OF_RESOURCES;
