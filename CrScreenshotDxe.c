@@ -346,7 +346,7 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
     } else {
-        if ((((*Buff)Context).KeyInput.UnicodeChar == Key.UnicodeChar) && (((*Buff)Context).KeyInput.ScanCode == Key.ScanCode)) {
+        if ((Context.KeyInput.UnicodeChar == Key.UnicodeChar) && (Context.KeyInput.ScanCode == Key.ScanCode)) {
             ((VOID **)Context.->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
