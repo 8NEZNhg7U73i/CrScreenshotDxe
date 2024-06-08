@@ -31,7 +31,8 @@
 
 [Depex]
   gEfiGraphicsOutputProtocolGuid AND
-  gEfiSimpleTextInputExProtocolGuid
+  gEfiSimpleTextInputExProtocolGuid AND
+  gEfiSimpleTextInProtocolGuid
 
 [BuildOptions]
   MSFT:*_*_*_CC_FLAGS            = /wd4244 /wd4267 /wd4334 /wd4245

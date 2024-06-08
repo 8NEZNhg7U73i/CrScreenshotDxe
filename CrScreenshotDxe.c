@@ -352,7 +352,9 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
-EFI_STATUS EFIAPI
+//EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_IN_PROTOCOL *This, IN EFI_INPUT_KEY *KeyInput, IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction, OUT VOID **NotifyHandle)
+EFI_STATUS
+EFIAPI
 KeyboardRegisterKeyNotify (
   IN EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL  *This,
   IN EFI_KEY_DATA                       *KeyData,
