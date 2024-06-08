@@ -474,8 +474,6 @@ CrScreenshotDxeEntry (
     
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
-        DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
-        return EFI_UNSUPPORTED;
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
@@ -553,6 +551,70 @@ CrScreenshotDxeEntry (
         }
     }
 
+    if (EFI_ERROR (Status)) {
+        // For each instance
+        for (Index = 0; Index < HandleCount; Index++) {
+            Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
+
+            // Get protocol handle
+            if (EFI_ERROR (Status)) {
+               DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextIn returned %r\n", Index, Status));
+               continue;
+            }
+
+            // Register Left key notification function
+            Status = SimpleTextInWaitForKeyStroke (
+                    SimpleTextIn,
+                    &SimpleTextInKeyStrokeF2,
+                    TakeScreenshot,
+                    &SimpleTextInHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Right key notification function
+            Status = SimpleTextInWaitForKeyStroke (
+                    SimpleTextIn,
+                    &SimpleTextInKeyStrokeF4,
+                    TakeScreenshot,
+                    &SimpleTextInHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Left Shift key notification function
+            Status = SimpleTextInWaitForKeyStroke (
+                    SimpleTextIn,
+                    &SimpleTextInKeyStrokeF8,
+                    TakeScreenshot,
+                    &SimpleTextInHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Right Shift key notification function
+            Status = SimpleTextInWaitForKeyStroke (
+                    SimpleTextIn,
+                    &SimpleTextInKeyStrokeF10,
+                    TakeScreenshot,
+                    &SimpleTextInHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status));
+            }
+        }
+    }
 
     // Free memory used for handle buffer
     if (HandleBuffer) {
