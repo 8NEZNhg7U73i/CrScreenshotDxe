@@ -305,6 +305,12 @@ TakeScreenshot (
 
 EFI_STATUS
 EFIAPI
+CrScreenshotnull(){
+    return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 CrScreenshotDxeEntry (
     IN EFI_HANDLE         ImageHandle,
     IN EFI_SYSTEM_TABLE   *SystemTable
