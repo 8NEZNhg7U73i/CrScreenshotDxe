@@ -302,6 +302,11 @@ TakeScreenshot (
     return EFI_SUCCESS;
 }
 
+typedef struct KeyFuncBuffStruct{
+    EFI_INPUT_KEY *KeyInput;
+    EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
+} KeyFuncBuff;
+
 void WaitKey(IN EFI_EVENT Event, IN VOID *Context)
 {
     //EFI_EVENT KeyEvent;
@@ -347,11 +352,6 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
         }
     }
 }
-
-typedef struct KeyFuncBuffStruct{
-    EFI_INPUT_KEY *KeyInput;
-    EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
-} KeyFuncBuff;
 
 EFI_STATUS
 SimpleTextInWaitForKeyStroke(
