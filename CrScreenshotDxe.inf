@@ -27,7 +27,7 @@
   gEfiGraphicsOutputProtocolGuid
   gEfiSimpleTextInputExProtocolGuid
   gEfiSimpleFileSystemProtocolGuid
-  //gCrScreenShotGuid
+  gCrScreenShotGuid
 
 [Depex]
   gEfiGraphicsOutputProtocolGuid AND
