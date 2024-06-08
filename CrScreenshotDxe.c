@@ -345,7 +345,7 @@ CrScreenshotDxeEntry (
         DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         if (!Status == EFI_SUCCESS)
         {
-            DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
+            DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         }
     } else {
         DEBUG((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
