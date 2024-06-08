@@ -311,7 +311,7 @@ CrScreenshotnullfunction (){
 
 
 EFI_CR_SCREEN_SHOT_PROTOCOL CrScreenshotnull(){
-    CrScreenshotnullfunction
+    CrScreenshotnullfunction()
 };
 
 EFI_STATUS
