@@ -337,7 +337,7 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        *CrScreenHandle;
     UINTN                             CrHandleCount = 0;
     //EFI_CR_SCREEN_SHOT_PROTOCOL       *CrScreenshot;
-    CrScreenHandle = NULL;
+    //CrScreenHandle = NULL;
     /*
     gEfiCrscreenshotDxeGuid.Data1 = 0x02e4e4f7;
     gEfiCrscreenshotDxeGuid.Data2 = 0x38d9;
