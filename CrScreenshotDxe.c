@@ -323,10 +323,10 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff = (VOID *)(Context);
     Print(L"Context: %p\n", Context);
-    Print(L"Context*: %p\n", *(VOID *)Context);
+    Print(L"Context*: %p\n", *(VOID **)Context);
     Print(L"Context&: %p\n", &Context);
     Print(L"Buff: %p\n", Buff);
-    Print(L"Buff*: %p\n", *(VOID *)Buff);
+    Print(L"Buff*: %p\n", *(VOID **)Buff);
     Print(L"Buff&: %p\n", &Buff);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
