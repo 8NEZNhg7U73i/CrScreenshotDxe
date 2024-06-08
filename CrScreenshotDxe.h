@@ -6,4 +6,4 @@ typedef EFI_STATUS (EFIAPI* CR_SCREEN_SHOT_CLASS_NULL)(
 
 struct _EFI_CR_SCREEN_SHOT_PROTOCOL {
   CR_SCREEN_SHOT_CLASS_NULL CrScreenshotnull();
-};
+};  
