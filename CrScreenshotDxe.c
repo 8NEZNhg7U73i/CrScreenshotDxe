@@ -341,13 +341,12 @@ void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
     EmptyKeyData.Key.UnicodeChar = 0;
     EmptyKeyData.KeyState.KeyShiftState = 0;
     EmptyKeyData.KeyState.KeyToggleState = 0;
-    KeyFuncBuff *Buff = *(VOID **)Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     if (!EFI_ERROR (Status)) {
         DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
     } else {
-        if ((Buff->KeyInput->UnicodeChar == Key.UnicodeChar) && (Buff->KeyInput->ScanCode == Key.ScanCode)) {
-            (Buff->KeyNotificationFunction)(&EmptyKeyData);
+        if ((KeyFuncBuff)(*(VOID **)Context)->KeyInput->UnicodeChar == Key.UnicodeChar) && ((KeyFuncBuff)(*(VOID **)Context->KeyInput->ScanCode == Key.ScanCode)) {
+            (KeyFuncBuff)(*(VOID **)Context->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
 }
