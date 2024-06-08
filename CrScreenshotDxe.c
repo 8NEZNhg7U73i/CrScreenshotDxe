@@ -322,8 +322,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff = Context;
-    Print(L"Context: %s\n", Context);
-    Print(L"Buff: %s\n", Buff);
+    Print(L"Context: %c\n", Context);
+    Print(L"Buff: %c\n", Buff);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
     Print(L"ScanCode: %0X\n", Key.ScanCode);
@@ -349,7 +349,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
     Print(L"UnicodeChar set: %0X\n", Buff->KeyInput->UnicodeChar);
-    Print(L"Buff: %s\n", Buff);
+    Print(L"Buff: %c\n", Buff);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
