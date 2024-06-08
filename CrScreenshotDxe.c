@@ -338,17 +338,17 @@ CrScreenshotDxeEntry (
     gEfiCrscreenshotDxeGuid.Data4[6] = 0x7a;
     gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
-    Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
+    DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
     if (!Status == EFI_SUCCESS){
         //Status = gBS->InstallProtocolInterface(CrScreenHandle, &gEfiCrscreenshotDxeGuid, EFI_NATIVE_INTERFACE, &CrScreenshot);
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
-        Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
+        DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         if (!Status == EFI_SUCCESS)
         {
-            Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
+            DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
         }
     } else {
-        Print(L"CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status);
+        DEBUG((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
         return EFI_ALREADY_STARTED;
     }
     
@@ -385,7 +385,7 @@ CrScreenshotDxeEntry (
 
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
-        Print(L"ShowStatus: SimpleText InputEx protocol not found\n");
+        DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
         return EFI_UNSUPPORTED;
     }
         // For each instance
