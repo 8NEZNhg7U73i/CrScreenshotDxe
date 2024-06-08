@@ -302,6 +302,81 @@ TakeScreenshot (
     return EFI_SUCCESS;
 }
 
+void WaitKey(IN EFI_EVENT Event, IN VOID *Context)
+{
+    //EFI_EVENT KeyEvent;
+
+    //UINTN        Index;
+    KeyEvent = gST->ConIn->WaitForKey;
+    //gBS->RaiseTPL((EFI_TPL) TPL_APPLICATION);
+    //Status = gBS->WaitForEvent(1, &KeyEvent, &Index);
+    //Print(L"WaitKey: WaitForEvent: %r\n", Status);
+    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    Print(L"WaitKey: ReadKeyStroke: %r\n", Status);
+
+    //Status = gBS->WaitForEvent(1, &KeyEvent, &waitidx);
+    //Print(L"Status: %r\n", Status);
+    //Status = gBS->CheckEvent(KeyEvent);
+    //Print(L"Status: %r\n", Status);
+    Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
+    Print(L"Status: %r\n", Status);
+    if (Status == EFI_SUCCESS) {
+        Print(L"Unicode char: %c\n", Key.UnicodeChar);
+        Print(L"Scan code: %X\n", Key.ScanCode);
+    }
+}
+
+EFI_KEY_DATA EmptyKeyData;
+KeyData.Key.ScanCode = 0;
+KeyData.Key.UnicodeChar = 0;
+KeyData.KeyState.KeyShiftState = 0;
+KeyData.KeyState.KeyToggleState = 0;
+
+void ReadKeyStroke(IN EFI_EVENT Event, IN VOID *Context)
+{
+    EFI_STATUS Status;
+    EFI_INPUT_KEY Key;
+    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    if (!EFI_ERROR (Status)) {
+        DEBUG ((-1, "gST->ConIn->ReadKeyStroke Failed: %r\n", Status));
+    } else {
+        if (((Context->KeyInput).UnicodeChar == Key.UnicodeChar) && ((Context->KeyInput).ScanCode == Key.ScanCode)) {
+            (Context->KeyNotificationFunction)(&EmptyKeyData);
+        }
+    }
+}
+
+typedef struct KeyFuncBuffStruct{
+    EFI_INPUT_KEY *KeyInput;
+    EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
+} KeyFuncBuff;
+
+EFI_STATUS
+SimpleTextInWaitForKeyStroke(
+    IN EFI_SIMPLE_TEXT_IN_PROTOCOL *This,
+    IN EFI_INPUT_KEY *KeyInput
+    IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
+    OUT VOID **NotifyHandle
+)
+{
+    EFI_EVENT TimeEvent;
+    EFI_STATUS Status;
+    KeyFuncBuff KeyFuncBuff;
+    KeyFuncBuff.KeyInput = KeyInput;
+    KeyFuncBuff.KeyNotificationFunction = KeyNotificationFunction;
+    Status = gBS->CreateEvent(EVR_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) &KeyFuncBuff, &TimeEvent);
+    if (!EFI_ERROR (Status)) {
+        DEBUG ((-1, "gBS->CreateEvent Failed: %r\n", Status));
+        return EFI_OUT_OF_RESOURCES;
+    }
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 1 * 1000 * 1000);
+    if (!EFI_ERROR (Status)) {
+        DEBUG ((-1, "gBS->SetTimer Failed: %r\n", Status));
+        return EFI_OUT_OF_RESOURCES;
+    }
+    return EFI_SUCCESS;
+}
+
 EFI_STATUS
 EFIAPI
 CrScreenshotDxeEntry (
@@ -318,12 +393,19 @@ CrScreenshotDxeEntry (
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
+    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF2;
+    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF4;
+    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF8;
+    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF10;
     EFI_HANDLE                        SimpleTextInExHandle;
+    EFI_HANDLE                        SimpleTextInHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
+    EFI_SIMPLE_TEXT_IN_PROTOCOL       *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
     EFI_GUID                          gEfiCrscreenshotDxeGuid;
     EFI_HANDLE                        CrScreenHandle = NULL;
     UINTN                             CrHandleCount = 0;
+
     gEfiCrscreenshotDxeGuid.Data1 = 0x02e4e4f7;
     gEfiCrscreenshotDxeGuid.Data2 = 0x38d9;
     gEfiCrscreenshotDxeGuid.Data3 = 0x4924;
@@ -335,13 +417,13 @@ CrScreenshotDxeEntry (
     gEfiCrscreenshotDxeGuid.Data4[5] = 0x84;
     gEfiCrscreenshotDxeGuid.Data4[6] = 0x7a;
     gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
+
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
     DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
-    if (!Status == EFI_SUCCESS){
+    if (!EFI_ERROR (Status)) {
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
         DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
-        if (!Status == EFI_SUCCESS)
-        {
+        if (!EFI_ERROR (Status)) {
             DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         }
     } else {
@@ -379,12 +461,26 @@ CrScreenshotDxeEntry (
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_SHIFT_PRESSED;
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyToggleState = 0;
 
+    // Set keystroke to be F2
+    SimpleTextInKeyStrokeF2.ScanCode = SCAN_F2;
+    SimpleTextInKeyStrokeF2.UnicodeChar = 'a';
 
+    // Set KeyStroke to be F4
+    SimpleTextInKeyStrokeF4.ScanCode = SCAN_F4;
+    SimpleTextInKeyStrokeF4.UnicodeChar = 'b';
+
+    // Set Keystroke to be F8
+    SimpleTextInKeyStrokeF8.ScanCode = SCAN_F8;
+    SimpleTextInKeyStrokeF8.UnicodeChar = 'c';
+
+    // Set Keystroke to be F10
+    SimpleTextInKeyStrokeF10.ScanCode = SCAN_F10;
+    SimpleTextInKeyStrokeF10.UnicodeChar = 'd';
+    
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
-    if (EFI_ERROR (Status)) {
+    if (!EFI_ERROR (Status)) {
         DEBUG((-1, "ShowStatus: SimpleText InputEx protocol not found\n"));
         return EFI_UNSUPPORTED;
-    }
         // For each instance
         for (Index = 0; Index < HandleCount; Index++) {
             Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInputExProtocolGuid, (VOID **) &SimpleTextInEx);
@@ -460,6 +556,7 @@ CrScreenshotDxeEntry (
                 DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
         }
+    }
 
 
     // Free memory used for handle buffer
