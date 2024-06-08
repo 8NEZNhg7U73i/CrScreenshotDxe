@@ -352,15 +352,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
-//EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_IN_PROTOCOL *This, IN EFI_INPUT_KEY *KeyInput, IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction, OUT VOID **NotifyHandle)
-EFI_STATUS
-EFIAPI
-KeyboardRegisterKeyNotify (
-  IN EFI_SIMPLE_TEXT_IN_PROTOCOL  *This,
-  IN EFI_KEY_DATA                       *KeyData,
-  IN EFI_KEY_NOTIFY_FUNCTION            KeyNotificationFunction,
-  OUT VOID                              **NotifyHandle
-  ){
+EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This, IN EFI_INPUT_KEY *KeyInput, IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction, OUT VOID **NotifyHandle)
+{
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     KeyFuncBuff Buff;
@@ -402,7 +395,7 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_HANDLE                        SimpleTextInHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
-    EFI_SIMPLE_TEXT_IN_PROTOCOL       *SimpleTextIn;
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL       *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
     EFI_GUID                          gEfiCrscreenshotDxeGuid;
     EFI_HANDLE                        CrScreenHandle = NULL;
