@@ -321,7 +321,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
-    KeyFuncBuff Buff2 = Context;
+    KeyFuncBuff Buff2 = *(VOID *)Context;
     KeyFuncBuff *Buff = *(VOID **)(Context);
     KeyFuncBuff **Buff1 = *(VOID **)(Context);
     Print(L"Context: %p\n", Context);
