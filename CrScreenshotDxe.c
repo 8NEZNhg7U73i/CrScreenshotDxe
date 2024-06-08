@@ -334,7 +334,7 @@ CrScreenshotDxeEntry (
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
     //EFI_GUID                          gEfiCrscreenshotDxeGuid;
-    EFI_HANDLE                        *CrScreenHandle;
+    EFI_HANDLE                        *CrScreenHandle = NULL;
     UINTN                             CrHandleCount = 0;
     //EFI_CR_SCREEN_SHOT_PROTOCOL       *CrScreenshot;
     //CrScreenHandle = NULL;
