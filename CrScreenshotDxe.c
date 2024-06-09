@@ -367,7 +367,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     Buff->KeyInput = KeyInput;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
-    Print(L"UnicodeChar set: %c\n", &(Buff->KeyInput->UnicodeChar));
+    Print(L"UnicodeChar set: %c\n", Buff->KeyInput->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     Print(L"Buff*: %p\n", *Buff);
     Print(L"Buff: %p\n", Buff);
