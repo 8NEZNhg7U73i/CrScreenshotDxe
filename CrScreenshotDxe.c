@@ -343,29 +343,27 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     OUT VOID **NotifyHandle
     )
 {
-    EFI_EVENT TimeEvent[10];
+    EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     static int num = 0;
-    KeyFuncBuff *Buff[10] = {NULL};
+    KeyFuncBuff *Buff = NULL;
     Print(L"num: %d\n", num);
-    Print(L"ScanCode set: %0X\n", (Buff[num])->ScanCode);
-    (Buff[num])->ScanCode = KeyInput->ScanCode;
-    (Buff[num])->KeyNotificationFunction = KeyNotificationFunction;
-    Print(L"ScanCode set: %0X\n", (Buff[num])->ScanCode);
-    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff[2], &TimeEvent[num]);
+    Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+    Buff->ScanCode = KeyInput->ScanCode;
+    Buff->KeyNotificationFunction = KeyNotificationFunction;
+    Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
         return Status;
     }
-    Status = gBS->SetTimer(TimeEvent[num], TimerPeriodic, 10 * 10 * 1000 * 1000);
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 10 * 10 * 1000 * 1000);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
     }
     num++;
-    Print(L"ScanCode set: %0X\n", Buff[0]->ScanCode);
-    Print(L"ScanCode set: %0X\n", Buff[72]->ScanCode);
     return EFI_SUCCESS;
 }
 
