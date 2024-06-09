@@ -326,6 +326,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
+    Print(L"Status: %r\n", Status);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
@@ -358,7 +359,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
         return Status;
     }
-    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 5 * 1000 * 1000);
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 50 * 1000 * 1000);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
