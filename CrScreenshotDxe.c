@@ -364,7 +364,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
         return Status;
     }
-    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 100 * 1000);
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 1000 * 1000);
     //gBS->SignalEvent(TimeEvent);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->SetTimer Failed: %r\n", Status);
