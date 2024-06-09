@@ -326,11 +326,13 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     VOID *TextInPointer = &gST->ConIn;
+    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *SimpleTextInCopy = AllocateZeroPool(sizeof(SimpleTextInCopy));
+    CopyMem(SimpleTextInCopy, &gST->ConIn, sizeof(SimpleTextInCopy));
     Print(L"TextInPointer: %p\n", TextInPointer);
     //Status = gBS->RaiseTPL(TPL_APPLICATION);
     //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
     //Print(L"Status: %r\n", Status);
-    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    Status = gST->ConIn->ReadKeyStroke ((*SimpleTextInCopy)->ConIn, &Key);
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (Status == EFI_SUCCESS) {
@@ -353,7 +355,8 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     KeyFuncBuff *Buff = AllocateZeroPool(sizeof(KeyFuncBuff));
-    Buff->ScanCode = KeyInput->ScanCode;
+    Buff->ScanCode = KeyInput->ScanCode;		CopyMem(&DcsHidePart, &GptMainEntrys[idx], sizeof(DcsHidePart));
+
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
