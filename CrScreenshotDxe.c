@@ -304,7 +304,6 @@ TakeScreenshot (
 
 typedef struct KeyFuncBuffStruct{
     UINT16 ScanCode;
-    CHAR16 UnicodeChar;
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
@@ -325,14 +324,11 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     KeyFuncBuff *Buff = Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
-    //Print(L"KeyInput Set: %0X\n", Buff->KeyInput);
-    Print(L"UnicodeChar: %s\n", Key.UnicodeChar);
     Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (!EFI_ERROR (Status)) {
         Print(L"re\n");
-        if ((Buff->UnicodeChar == Key.UnicodeChar) && (Buff->ScanCode == Key.ScanCode)) {
+        if (Buff->ScanCode == Key.ScanCode) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
@@ -350,10 +346,8 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     KeyFuncBuff *Buff = NULL;
     //CHAR16 *Buff1 = L"test\n";
     Buff->ScanCode = KeyInput->ScanCode;
-    Buff->UnicodeChar = KeyInput->UnicodeChar;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     //Print(L"KeyInput Set: %0X\n", Buff.KeyInput);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
