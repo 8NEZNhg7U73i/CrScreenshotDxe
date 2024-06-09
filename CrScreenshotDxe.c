@@ -454,19 +454,19 @@ CrScreenshotDxeEntry (
 
     // Set keystroke to be F2
     SimpleTextInKeyStrokeF2.ScanCode = SCAN_F2;
-    SimpleTextInKeyStrokeF2.UnicodeChar = '\0';
+    SimpleTextInKeyStrokeF2.UnicodeChar = '';
 
     // Set KeyStroke to be F4
     SimpleTextInKeyStrokeF4.ScanCode = SCAN_F4;
-    SimpleTextInKeyStrokeF4.UnicodeChar = '\0';
+    SimpleTextInKeyStrokeF4.UnicodeChar = '';
 
     // Set Keystroke to be F8
     SimpleTextInKeyStrokeF8.ScanCode = SCAN_F8;
-    SimpleTextInKeyStrokeF8.UnicodeChar = '\0';
+    SimpleTextInKeyStrokeF8.UnicodeChar = '';
 
     // Set Keystroke to be F10
     SimpleTextInKeyStrokeF10.ScanCode = SCAN_F10;
-    SimpleTextInKeyStrokeF10.UnicodeChar = '\0';
+    SimpleTextInKeyStrokeF10.UnicodeChar = '';
     
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
