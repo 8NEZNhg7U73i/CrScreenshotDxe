@@ -323,7 +323,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
-    UINTN Eventnum;
+    //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     VOID *TextInPointer = &gST->ConIn;
     Print(L"TextInPointer: %p\n", TextInPointer);
