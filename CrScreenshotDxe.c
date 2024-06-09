@@ -303,7 +303,7 @@ TakeScreenshot (
 }
 
 typedef struct KeyFuncBuffStruct{
-    EFI_INPUT_KEY *KeyInput;
+    EFI_INPUT_KEY KeyInput;
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
