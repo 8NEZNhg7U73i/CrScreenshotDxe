@@ -323,7 +323,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
-    //UINTN Eventnum;
+    UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     Status = gBS->RaiseTPL(TPL_APPLICATION);
     Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
