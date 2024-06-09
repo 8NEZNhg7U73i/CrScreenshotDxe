@@ -346,12 +346,10 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     static int Eventnum = 0;
     EFI_STATUS Status;
     KeyFuncBuff *Buff = NULL;
-    //CHAR16 *Buff1 = L"test\n";
     Buff->ScanCode = KeyInput->ScanCode;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
-    //Print(L"KeyInput Set: %0X\n", Buff.KeyInput);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent[Eventnum]);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
@@ -363,6 +361,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
     }
+    Eventnum++;
     return EFI_SUCCESS;
 }
 
