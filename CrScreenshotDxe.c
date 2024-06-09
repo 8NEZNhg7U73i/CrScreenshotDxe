@@ -323,8 +323,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff = Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
-    Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff->KeyInput->UnicodeChar);
+    Print(L"ScanCode set: %0X\n", Buff->KeyInput.ScanCode);
+    Print(L"UnicodeChar set: %c\n", Buff->KeyInput.UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     Print(L"KeyInput Set: %0X\n", Buff->KeyInput);
     Print(L"UnicodeChar: %s\n", Key.UnicodeChar);
