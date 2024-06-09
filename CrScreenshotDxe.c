@@ -371,6 +371,9 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     Print(L"Buff*: %p\n", *Buff);
     Print(L"Buff: %p\n", Buff);
     Print(L"Buff&: %p\n", &Buff);
+    Print(L"Buff1*: %p\n", *Buff1);
+    Print(L"Buff1: %p\n", Buff1);
+    Print(L"Buff1&: %p\n", &Buff1);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, (VOID *) Buff1, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
