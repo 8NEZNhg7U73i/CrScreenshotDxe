@@ -335,6 +335,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
+KeyFuncBuff *Buff[10];
+
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
     IN EFI_INPUT_KEY *KeyInput,
