@@ -22,6 +22,7 @@
   DebugLib
   PrintLib
   UefiLib
+  BaseMemoryLib
 
 [Protocols]
   gEfiGraphicsOutputProtocolGuid
