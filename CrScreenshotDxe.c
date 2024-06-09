@@ -329,9 +329,6 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_INPUT_KEY Key;
     //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
-    VOID *SimpleTextInCopy = AllocateZeroPool(sizeof(gST->ConIn));
-    CopyMem(SimpleTextInCopy, &gST->ConIn, sizeof(gST->ConIn));
-    Print(L"SimpleTextInCopy: %p\n", SimpleTextInCopy);
     //Status = gBS->RaiseTPL(TPL_APPLICATION);
     //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
     //Print(L"Status: %r\n", Status);
