@@ -332,7 +332,6 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
             (Buff.KeyNotificationFunction)(&EmptyKeyData);
         }
     }
-    ++(Buff->ScanCode);
 }
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
