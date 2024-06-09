@@ -365,7 +365,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     }
     num++;
     Print(L"ScanCode set: %0X\n", Buff[0]->ScanCode);
-    Print(L"ScanCode set: %0X\n", Buff[7]->ScanCode);
+    Print(L"ScanCode set: %0X\n", Buff[72]->ScanCode);
     return EFI_SUCCESS;
 }
 
