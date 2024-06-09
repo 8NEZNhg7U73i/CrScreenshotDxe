@@ -365,7 +365,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         return Status;
     }
     num++;
-    KeyFuncBuff = KeyFuncBuff + sizeof(KeyFuncBuff);
+    Buff = Buff + sizeof(KeyFuncBuff);
     return EFI_SUCCESS;
 }
 
