@@ -305,7 +305,6 @@ TakeScreenshot (
 
 typedef struct KeyFuncBuffStruct{
     UINT16 ScanCode;
-    CHAR16 UnicodeChar;
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
 } KeyFuncBuff;
 
@@ -326,14 +325,11 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     KeyFuncBuff *Buff = Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
-    //Print(L"KeyInput Set: %0X\n", Buff->KeyInput);
-    Print(L"UnicodeChar: %s\n", Key.UnicodeChar);
     Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (!EFI_ERROR (Status)) {
         Print(L"re\n");
-        if ((Buff->UnicodeChar == Key.UnicodeChar) && (Buff->ScanCode == Key.ScanCode)) {
+        if (Buff->ScanCode == Key.ScanCode) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
@@ -346,25 +342,22 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     OUT VOID **NotifyHandle
     )
 {
-    EFI_EVENT TimeEvent[10];
+    EFI_EVENT TimeEvent;
     EFI_STATUS Status;
-    static int num = 0;
-    KeyFuncBuff *Buff[10] = {NULL};
+    KeyFuncBuff *Buff = NULL;
     //CHAR16 *Buff1 = L"test\n";
-    Buff[num]->ScanCode = KeyInput->ScanCode;
-    Buff[num]->UnicodeChar = KeyInput->UnicodeChar;
-    Buff[num]->KeyNotificationFunction = KeyNotificationFunction;
-    Print(L"ScanCode set: %0X\n", Buff[num]->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff[num]->UnicodeChar);
-    Print(L"KeyNotificationFunction set: %s\n", Buff[num]->KeyNotificationFunction);
+    Buff->ScanCode = KeyInput->ScanCode;
+    Buff->KeyNotificationFunction = KeyNotificationFunction;
+    Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+    Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     //Print(L"KeyInput Set: %0X\n", Buff.KeyInput);
-    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff[num], &TimeEvent[num]);
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
         return Status;
     }
-    Status = gBS->SetTimer(TimeEvent[num], TimerPeriodic, 5 * 10 * 1000 * 1000);
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, 10 * 10 * 1000 * 1000);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
@@ -457,19 +450,15 @@ CrScreenshotDxeEntry (
 
     // Set keystroke to be F2
     SimpleTextInKeyStrokeF2.ScanCode = SCAN_F2;
-    SimpleTextInKeyStrokeF2.UnicodeChar = 'a';
 
     // Set KeyStroke to be F4
     SimpleTextInKeyStrokeF4.ScanCode = SCAN_F4;
-    SimpleTextInKeyStrokeF4.UnicodeChar = 'd';
 
     // Set Keystroke to be F8
     SimpleTextInKeyStrokeF8.ScanCode = SCAN_F8;
-    SimpleTextInKeyStrokeF8.UnicodeChar = '4';
 
     // Set Keystroke to be F10
     SimpleTextInKeyStrokeF10.ScanCode = SCAN_F10;
-    SimpleTextInKeyStrokeF10.UnicodeChar = 'F';
     
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
