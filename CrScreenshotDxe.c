@@ -331,7 +331,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     KeyFuncBuff *Buff = Context;
     Status = gBS->RaiseTPL(TPL_APPLICATION);
     //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
-    //Print(L"Status: %r\n", Status);
+    Print(L"Status: %r\n", Status);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
