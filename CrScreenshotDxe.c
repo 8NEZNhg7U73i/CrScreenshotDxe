@@ -329,14 +329,13 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_INPUT_KEY Key;
     //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
-    EFI_SIMPLE_TEXT_INPUT_PROTOCOL *SimpleTextInCopy = AllocateZeroPool(sizeof(gST->ConIn));
-    Print(L"SimpleTextInCopy: %p\n", SimpleTextInCopy);
-   CopyMem(SimpleTextInCopy, &gST->ConIn, sizeof(gST->ConIn));
+    VOID *SimpleTextInCopy = AllocateZeroPool(sizeof(gST->ConIn));
+    CopyMem(SimpleTextInCopy, &gST->ConIn, sizeof(gST->ConIn));
     Print(L"SimpleTextInCopy: %p\n", SimpleTextInCopy);
     //Status = gBS->RaiseTPL(TPL_APPLICATION);
     //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
     //Print(L"Status: %r\n", Status);
-    Status = gST->ConIn->ReadKeyStroke (SimpleTextInCopy, &Key);
+    Status = gST->ConIn->ReadKeyStroke ((EFI_SIMPLE_TEXT_INPUT_PROTOCOL)SimpleTextInCopy, &Key);
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (Status == EFI_SUCCESS) {
