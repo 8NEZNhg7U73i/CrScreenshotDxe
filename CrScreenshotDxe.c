@@ -362,6 +362,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         return Status;
     }
     Eventnum++;
+    Print (L"%d\n", Eventnum);
     return EFI_SUCCESS;
 }
 
