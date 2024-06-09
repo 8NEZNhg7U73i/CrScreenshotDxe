@@ -332,7 +332,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (!EFI_ERROR (Status)) {
         Print(L"re\n");
-        if ((Buff->KeyInput->UnicodeChar == Key.UnicodeChar) && (Buff->KeyInput->ScanCode == Key.ScanCode)) {
+        if ((Buff->UnicodeChar == Key.UnicodeChar) && (Buff->ScanCode == Key.ScanCode)) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
