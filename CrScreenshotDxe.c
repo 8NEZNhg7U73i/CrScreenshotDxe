@@ -347,7 +347,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     static int num = 0;
-    static VOID* pointer = AllocatePool(10 * sizeof(KeyFuncBuff));
+    static void *pointer = AllocatePool(10 * sizeof(KeyFuncBuff));
     KeyFuncBuff *Buff = pointer + (num * sizeof(KeyFuncBuff));
     Print(L"num: %d\n", num);
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
