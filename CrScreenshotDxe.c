@@ -21,6 +21,7 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#pragma optimize( "", off )
 
 #include <Uefi.h>
 #include <Library/UefiLib.h>
@@ -636,3 +637,4 @@ CrScreenshotDxeEntry (
 
     return EFI_SUCCESS;
 }
+#pragma optimize( "", on )
