@@ -34,6 +34,10 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Protocol/SimpleTextInEx.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/DevicePathLib.h>
+#include <Library/BaseMemoryLib.h>
+
+
 
 #include "lodepng.h" //PNG encoding library
 
