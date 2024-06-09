@@ -324,6 +324,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     KeyFuncBuff *Buff2 = Context;
     KeyFuncBuff *Buff = *(VOID **)(Context);
     KeyFuncBuff **Buff1 = *(VOID **)(Context);
+    Print(L"Context: %s\n", Context);
     Print(L"Context: %p\n", Context);
     Print(L"Context*: %p\n", *(VOID **)Context);
     Print(L"Context&: %p\n", &Context);
