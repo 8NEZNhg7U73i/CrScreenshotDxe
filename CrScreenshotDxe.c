@@ -368,6 +368,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
     Print(L"UnicodeChar set: %c\n", &(Buff->KeyInput->UnicodeChar));
+    Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     Print(L"Buff*: %p\n", *Buff);
     Print(L"Buff: %p\n", Buff);
     Print(L"Buff&: %p\n", &Buff);
@@ -472,19 +473,19 @@ CrScreenshotDxeEntry (
 
     // Set keystroke to be F2
     SimpleTextInKeyStrokeF2.ScanCode = SCAN_F2;
-    SimpleTextInKeyStrokeF2.UnicodeChar = 0;
+    SimpleTextInKeyStrokeF2.UnicodeChar = 'a';
 
     // Set KeyStroke to be F4
     SimpleTextInKeyStrokeF4.ScanCode = SCAN_F4;
-    SimpleTextInKeyStrokeF4.UnicodeChar = 0;
+    SimpleTextInKeyStrokeF4.UnicodeChar = 'd';
 
     // Set Keystroke to be F8
     SimpleTextInKeyStrokeF8.ScanCode = SCAN_F8;
-    SimpleTextInKeyStrokeF8.UnicodeChar = 0;
+    SimpleTextInKeyStrokeF8.UnicodeChar = '4';
 
     // Set Keystroke to be F10
     SimpleTextInKeyStrokeF10.ScanCode = SCAN_F10;
-    SimpleTextInKeyStrokeF10.UnicodeChar = 0;
+    SimpleTextInKeyStrokeF10.UnicodeChar = 'F';
     
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
