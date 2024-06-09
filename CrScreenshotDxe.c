@@ -319,7 +319,7 @@ void emptykeydata ()
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
-    EFI_STATUS Status;
+    EFI_STATUS Status = 0;
     EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff2 = Context;
     KeyFuncBuff *Buff = *(VOID **)(Context);
