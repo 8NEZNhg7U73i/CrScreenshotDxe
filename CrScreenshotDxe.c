@@ -344,7 +344,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     Print(L"KeyNotificationFunction set: %s\n", Buff->KeyNotificationFunction);
     Print(L"KeyInput Set: %0X\n", Buff->KeyInput);
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
-    Print(L"UnicodeChar set: %c\n", Buff1->KeyInput->UnicodeChar);
+    Print(L"UnicodeChar set: %c\n", (*Buff1)->KeyInput->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff1->KeyNotificationFunction);
     Print(L"KeyInput Set: %0X\n", Buff1->KeyInput);
     Print(L"ScanCode set: %0X\n", Buff2->KeyInput->ScanCode);
