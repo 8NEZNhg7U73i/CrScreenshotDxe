@@ -345,7 +345,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent[10];
     static int Eventnum = 0;
     EFI_STATUS Status;
-    KeyFuncBuff Buff
+    KeyFuncBuff Buff;
     //CHAR16 *Buff1 = L"test\n";
     Buff.ScanCode = KeyInput->ScanCode;
     Buff.KeyNotificationFunction = KeyNotificationFunction;
