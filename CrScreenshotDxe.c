@@ -322,7 +322,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
-    KeyFuncBuff Buff = (KeyFuncBuff *)Context;
+    KeyFuncBuff Buff = (KeyFuncBuff)Context;
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", Buff.ScanCode);
     Print(L"KeyNotificationFunction set: %s\n", Buff.KeyNotificationFunction);
