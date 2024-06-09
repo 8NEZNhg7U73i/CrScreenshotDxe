@@ -359,8 +359,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     KeyFuncBuff *Buff = AllocateZeroPool(sizeof(KeyFuncBuff));
-    Buff->ScanCode = KeyInput->ScanCode;		CopyMem(&DcsHidePart, &GptMainEntrys[idx], sizeof(DcsHidePart));
-
+    Buff->ScanCode = KeyInput->ScanCode;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
