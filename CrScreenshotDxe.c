@@ -354,7 +354,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     Print(L"UnicodeChar set: %c\n", Buff.KeyInput->UnicodeChar);
     Print(L"KeyNotificationFunction set: %s\n", Buff.KeyNotificationFunction);
     Print(L"KeyInput Set: %0X\n", Buff.KeyInput);
-    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, &Buff, &TimeEvent);
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->CreateEvent Failed: %r\n", Status);
