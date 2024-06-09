@@ -335,7 +335,6 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     }
 }
 
-KeyFuncBuff *Buff[10];
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
@@ -347,7 +346,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent[10];
     EFI_STATUS Status;
     static int num = 0;
-    Buff[10] = NULL;
+    KeyFuncBuff *Buff[10] = {NULL};
     Print(L"num: %d\n", num);
     Print(L"ScanCode set: %0X\n", (Buff[num])->ScanCode);
     (Buff[num])->ScanCode = KeyInput->ScanCode;
