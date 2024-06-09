@@ -615,8 +615,8 @@ CrScreenshotDxeEntry (
             } else {
                 Print (L"CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status);
             }
-        }
 */
+        }
 
         // Show success only when we found at least one working implementation
         if (Installed)
