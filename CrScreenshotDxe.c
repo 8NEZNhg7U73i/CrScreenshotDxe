@@ -365,6 +365,8 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         return Status;
     }
     num++;
+    Print(L"ScanCode set: %0X\n", Buff[0]->ScanCode);
+    Print(L"KeyNotificationFunction set: %s\n", Buff[0]->KeyNotificationFunction);
     return EFI_SUCCESS;
 }
 
