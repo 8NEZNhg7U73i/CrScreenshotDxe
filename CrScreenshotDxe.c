@@ -328,7 +328,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
     if (!EFI_ERROR (Status)) {
-        Print(L"re\n");
+        Print(L"ScanCode set: %0X\n", Buff->ScanCode);
         if (Buff->ScanCode == Key.ScanCode) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
