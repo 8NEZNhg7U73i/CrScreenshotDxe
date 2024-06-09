@@ -319,8 +319,8 @@ void emptykeydata ()
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
+    //EFI_STATUS Status;
+    //EFI_INPUT_KEY Key;
     KeyFuncBuff *Buff2 = Context;
     KeyFuncBuff *Buff = *(VOID **)(Context);
     KeyFuncBuff **Buff1 = *(VOID **)(Context);
@@ -336,18 +336,20 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     Print(L"Buff2: %p\n", Buff2);
     Print(L"Buff2*: %p\n", *(VOID **)Buff2);
     Print(L"Buff2&: %p\n", &Buff2);
-    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
+    //Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ScanCode set: %0X\n", ((KeyFuncBuff *)Context)->KeyInput->ScanCode);
     Print(L"ScanCode set: %0X\n", Buff->KeyInput->ScanCode);
     Print(L"UnicodeChar set: %0X\n", &(Buff->KeyInput->UnicodeChar));
     Print(L"KeyInput Set: %0X\n", Buff->KeyInput);
     Print(L"ScanCode: %0X\n", Key.ScanCode);
+    /*
     if (!EFI_ERROR (Status)) {
         Print(L"re\n");
         if ((Buff->KeyInput->UnicodeChar == Key.UnicodeChar) && (Buff->KeyInput->ScanCode == Key.ScanCode)) {
             (Buff->KeyNotificationFunction)(&EmptyKeyData);
         }
     }
+    */
 }
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
