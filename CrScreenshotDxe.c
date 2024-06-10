@@ -358,6 +358,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         //}
         //Print(L"ReadKeyStroke: %r\n", Status);
         // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+        (Buff->KeyNotificationFunction)(&EmptyKeyData);
         for (Index = 0; Index <= Buff->num; Index++)
         {
             //Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
