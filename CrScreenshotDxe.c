@@ -125,8 +125,6 @@ ShowStatus (
     UINTN        HandleCount;
     EFI_HANDLE   *HandleBuffer = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
     UINTN i;
     
     // Locate all instances of GOP
@@ -136,6 +134,9 @@ ShowStatus (
         return EFI_UNSUPPORTED;
     }
     
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE][HandleCount];
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE][HandleCount];
+
     // Set square color
     for (i = 0 ; i < STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE; i++) {
         Square[i].Blue = Blue;
@@ -155,16 +156,16 @@ ShowStatus (
             
         Print(L"i: %d\n", i);
         // Backup current image
-        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+        GraphicsOutput->Blt(GraphicsOutput, Backup[HandleCount], EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
         
         // Draw the status square
-        GraphicsOutput->Blt(GraphicsOutput, Square, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+        GraphicsOutput->Blt(GraphicsOutput, Square[HandleCount], EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
         
         // Wait 100ms
         gBS->Stall(100*1000);
         
         // Restore the backup
-        GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+        GraphicsOutput->Blt(GraphicsOutput, Backup[HandleCount], EfiBltBufferToVideo, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
     }
     
     return EFI_SUCCESS;
