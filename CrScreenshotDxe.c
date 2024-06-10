@@ -32,6 +32,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/SimpleTextInEx.h>
+#include <Protocol/SimpleTextOutput.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/DevicePathLib.h>
