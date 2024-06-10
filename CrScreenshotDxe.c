@@ -332,6 +332,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         WaitForKeyBool = TRUE;
         KeyFuncBuff *Buff = Context;
         (Buff->KeyNotificationFunction)(&EmptyKeyData);
+        WaitForKeyBool = FALSE;
     }
 }
 
