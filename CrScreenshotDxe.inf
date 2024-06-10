@@ -21,15 +21,21 @@
   UefiDriverEntryPoint
   DebugLib
   PrintLib
+  UefiLib
+  BaseMemoryLib
 
 [Protocols]
   gEfiGraphicsOutputProtocolGuid
   gEfiSimpleTextInputExProtocolGuid
+  gEfiSimpleTextInProtocolGuid
+  gEfiSimpleTextOutProtocolGuid
   gEfiSimpleFileSystemProtocolGuid
 
 [Depex]
   gEfiGraphicsOutputProtocolGuid AND
-  gEfiSimpleTextInputExProtocolGuid
+  gEfiSimpleTextInputExProtocolGuid AND
+  gEfiSimpleTextInProtocolGuid AND
+  gEfiSimpleTextOutProtocolGuid
 
 [BuildOptions]
   MSFT:*_*_*_CC_FLAGS            = /wd4244 /wd4267 /wd4334 /wd4245
