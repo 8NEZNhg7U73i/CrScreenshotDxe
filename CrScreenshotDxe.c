@@ -518,28 +518,18 @@ CrScreenshotDxeEntry (
         }
     }
 
-    Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInProtocolGuid, NULL, &HandleCount, &HandleBuffer);
-    if (!EFI_ERROR (Status)) {
+    if (Installed == FALSE) {
         emptykeydata();
-        // For each instance
-        for (Index = 0; Index < HandleCount; Index++) {
-            Status = gBS->HandleProtocol (HandleBuffer[Index], &gEfiSimpleTextInProtocolGuid, (VOID **) &SimpleTextIn);
 
-            // Get protocol handle
-            if (EFI_ERROR (Status)) {
-               Print (L"CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextIn returned %r\n", Index, Status);
-               continue;
-            }
-
-            // Register Left key notification function
-            Status = TimerSignal (
-                    TakeScreenshot,
-                    );
-            if (!EFI_ERROR (Status)) {
-                Installed = TRUE;
-            } else {
-                Print (L"CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status);
-            }
+        // Register time base notification function
+        Status = TimerSignal (
+                TakeScreenshot,
+                );
+        if (!EFI_ERROR (Status)) {
+            Installed = TRUE;
+        } else {
+            Print (L"CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status);
+        }
 
         // Show success only when we found at least one working implementation
         if (Installed)
