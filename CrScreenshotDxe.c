@@ -336,7 +336,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 }
 
 EFI_STATUS EFIAPI TimerSignal (
-    IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
+    IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction
     )
 {
     EFI_EVENT TimeEvent;
