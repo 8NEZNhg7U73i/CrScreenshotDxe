@@ -182,7 +182,7 @@ TakeScreenshot (
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
     static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
     UINTN      ImageSize;         // Size in pixels
-    static     LastImageSize = 0;
+    static UINTN    LastImageSize = 0;
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
     EFI_STATUS Status;
