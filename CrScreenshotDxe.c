@@ -180,7 +180,9 @@ TakeScreenshot (
     EFI_FILE_PROTOCOL *File = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
+    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
     UINTN      ImageSize;         // Size in pixels
+    static UINTN    LastImageSize = 0;
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
     EFI_STATUS Status;
@@ -272,7 +274,15 @@ TakeScreenshot (
                 Image[j].Red = Temp;
                 Image[j].Reserved = 0xFF;
             }
-        
+
+            if (LastImageSize == ImageSize) {
+                Status = CompareMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+                if (Status == EFI_SUCCESS)
+                {
+                    break;
+                }
+            }
+
             // Encode raw RGB image to PNG format
             j = lodepng_encode32(&PngFile, &PngFileSize, (CONST UINT8*)Image, ScreenWidth, ScreenHeight);
             if (j) {
@@ -288,6 +298,22 @@ TakeScreenshot (
                 break;
             }
             
+
+            gBS->FreePool(LastImage);
+            Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&LastImage);
+            if (EFI_ERROR(Status)) {
+                DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
+                break;
+            }
+
+            CopyMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+            if (EFI_ERROR(Status)) {
+                DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
+                break;
+            }
+
+            LastImageSize = ImageSize;
+
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
         } while(0);
