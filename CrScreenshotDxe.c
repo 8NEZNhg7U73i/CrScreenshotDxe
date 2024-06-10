@@ -278,6 +278,7 @@ TakeScreenshot (
                 Status = CompareMem(&LastImage, &Image, sizeof(Image));
                 if (Status == EFI_SUCCESS)
                 {
+                    Print(L"CompareMem: %0X\n", Status);
                     break;
                 }
             }
