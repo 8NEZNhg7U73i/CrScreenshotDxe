@@ -522,9 +522,7 @@ CrScreenshotDxeEntry (
         emptykeydata();
 
         // Register time base notification function
-        Status = TimerSignal (
-                TakeScreenshot,
-                );
+        Status = TimerSignal (TakeScreenshot);
         if (!EFI_ERROR (Status)) {
             Installed = TRUE;
         } else {
