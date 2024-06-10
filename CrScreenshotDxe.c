@@ -280,8 +280,6 @@ TakeScreenshot (
                 Print(L"CompareMem: %0X\n", Status);
                 if (Status == EFI_SUCCESS)
                 {
-                    Print(L"sizeof(LastImage): %d\n", sizeof(&LastImage));
-                    Print(L"sizeof(Image): %d\n", ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                     break;
                 }
             }
