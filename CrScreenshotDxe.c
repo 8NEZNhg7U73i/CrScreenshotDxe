@@ -179,10 +179,10 @@ TakeScreenshot (
     EFI_FILE_PROTOCOL *Fs = NULL;
     EFI_FILE_PROTOCOL *File = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
-    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
-    UINTN      ImageSize;         // Size in pixels
-    static UINTN    LastImageSize = 0;
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image[10] = {NULL};
+    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage[10] = {NULL};
+    UINTN      ImageSize[10];         // Size in pixels
+    static UINTN    LastImageSize[10] = 0;
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
     EFI_STATUS Status;
