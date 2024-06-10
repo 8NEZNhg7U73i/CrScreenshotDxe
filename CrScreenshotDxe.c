@@ -79,7 +79,7 @@ FindWritableFs (
             if (*WritableFs == NULL) {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
-                    Print (L"FindWritableFs: Fs->Open[%d] returned %r\n", i, Status);
+                    DEBUG((-1, L"FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
                     continue;
                 }
                 
@@ -90,7 +90,7 @@ FindWritableFs (
             } else {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
-                    Print (L"FindWritableFs: Fs->Open[%d] returned %r\n", i, Status);
+                    DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
                     continue;
                 }
                 
@@ -344,14 +344,14 @@ EFI_STATUS EFIAPI TimerSignal (
     KeyFuncBuff *Buff = NULL;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
-    Print(L"Status: %r\n", Status);
+    DEBUG((-1, "Status: %r\n", Status));
     if (EFI_ERROR (Status)) {
-        Print (L"gBS->CreateEvent Failed: %r\n", Status);
+        DEBUG((-1, "gBS->CreateEvent Failed: %r\n", Status));
         return Status;
     }
     Status = gBS->SetTimer(TimeEvent, TimerPeriodic, Timer);
     if (EFI_ERROR (Status)) {
-        Print (L"gBS->SetTimer Failed: %r\n", Status);
+        DEBUG((-1, "gBS->SetTimer Failed: %r\n", Status));
         return Status;
     }
     return EFI_SUCCESS;
@@ -396,10 +396,10 @@ CrScreenshotDxeEntry (
     if (EFI_ERROR (Status)) {
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
         if (!EFI_ERROR (Status)) {
-            Print (L"CrScreenshotDxeEntry: gBS->InstallMultipleProtocolInterfaces returned %r\n", Status);
+            DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallMultipleProtocolInterfaces returned %r\n", Status));
         }
     } else {
-        Print (L"CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status);
+        DEBUG((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
         return EFI_ALREADY_STARTED;
     }
     
@@ -468,7 +468,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register key notification function
@@ -481,7 +481,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register Left Shift key notification function
@@ -494,7 +494,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register Right Shift key notification function
@@ -507,7 +507,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
         }
 
@@ -526,7 +526,7 @@ CrScreenshotDxeEntry (
         if (!EFI_ERROR (Status)) {
             Installed = TRUE;
         } else {
-            Print (L"CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status);
+            DEBUG((-1, "CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status));
         }
 
         // Show success only when we found at least one working implementation
