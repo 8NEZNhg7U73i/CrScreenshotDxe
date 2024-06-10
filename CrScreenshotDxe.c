@@ -153,7 +153,6 @@ ShowStatus (
             continue;
         }
             
-        Print(L"i: %d\n", i);
         // Backup current image
         GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
         
@@ -314,7 +313,6 @@ TakeScreenshot (
             }
 
             LastImageSize = ImageSize;
-            Print(L"ii: %d\n", i);
 
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
