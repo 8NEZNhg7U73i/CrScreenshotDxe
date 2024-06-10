@@ -310,9 +310,7 @@ TakeScreenshot (
 }
 
 typedef struct KeyFuncBuffStruct{
-    UINT16 ScanCode[100];
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
-    UINTN num;
 } KeyFuncBuff;
 
 EFI_KEY_DATA EmptyKeyData;
@@ -326,75 +324,26 @@ void emptykeydata ()
 }
 
 BOOLEAN WaitForKeyBool;
-#define Timer 5 * 10 * 1000 * 1000
+#define Timer 2 * 10 * 1000 * 1000
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
-    UINTN Index = 0;
-    // EFI_EVENT event[1];
-    // event[0] = gST->ConIn->WaitForKey;
-    // UINTN num = 0;
-    UINTN Eventnum;
-    KeyFuncBuff *Buff = Context;
-    (Buff->KeyNotificationFunction)(&EmptyKeyData);
     if (!WaitForKeyBool){
-        Status = gBS->RaiseTPL(TPL_APPLICATION);
-        // Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
-        // Print(L"Status: %r\n", Status);
-        // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-        // Status = gBS->CheckEvent(gST->ConIn->WaitForKey);
-        // Print(L"ScanCode: %0X\n", Key.ScanCode);
-        // Status = gST->ConIn->Reset(gST->ConIn, FALSE);
-        // Print(L"Reset: %r\n", Status);
         WaitForKeyBool = TRUE;
-        Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
-        //Print(L"gBS->WaitForEvent: %r\n", Status);
-        Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
-        Status = gST->ConOut->TestString(gST->ConOut, &Key.UnicodeChar);
-        //if (Status == EFI_SUCCESS) {
-            //Status = gST->ConOut->OutputString(gST->ConOut, &Key.UnicodeChar);
-        Print(L"%s", Key.UnicodeChar);
-        //}
-        //Print(L"ReadKeyStroke: %r\n", Status);
-        // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-        for (Index = 0; Index <= Buff->num; Index++)
-        {
-            //Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
-            //Print(L"Buff->num: %d\n", Buff->num);
-            if (Status == EFI_SUCCESS)
-            {
-                if (Buff->ScanCode[Index] == Key.ScanCode)
-                {
-                    (Buff->KeyNotificationFunction)(&EmptyKeyData);
-                    break;
-                }
-            }
-            // Print(L"ScanCode: %0X\n", Key.ScanCode);
-        }
-        WaitForKeyBool = FALSE;
-        Status = gBS->SetTimer(Event, TimerPeriodic, Timer);
-        // Status = gBS->CloseEvent(Event);
-        // Print(L"gBS->CloseEvent: %r\n", Status);
+        EFI_STATUS Status;
+        KeyFuncBuff *Buff = Context;
+        (Buff->KeyNotificationFunction)(&EmptyKeyData);
     }
 }
 
-EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
-    IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
-    IN EFI_INPUT_KEY *KeyInput,
+EFI_STATUS EFIAPI TimerSignal (
     IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction,
-    OUT VOID **NotifyHandle
     )
 {
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
-    static UINTN num = 0;
     KeyFuncBuff *Buff = NULL;
-    Buff->ScanCode[num] = KeyInput->ScanCode;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
-    Buff->num = num;
-    Print(L"ScanCode set: %0X\n", Buff->ScanCode[num]);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
     if (EFI_ERROR (Status)) {
@@ -402,12 +351,10 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         return Status;
     }
     Status = gBS->SetTimer(TimeEvent, TimerPeriodic, Timer);
-    //gBS->SignalEvent(TimeEvent);
     if (EFI_ERROR (Status)) {
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
     }
-    num++;
     return EFI_SUCCESS;
 }
 
@@ -427,14 +374,8 @@ CrScreenshotDxeEntry (
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
     EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
-    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF2;
-    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF4;
-    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF8;
-    EFI_INPUT_KEY                     SimpleTextInKeyStrokeF10;
     EFI_HANDLE                        SimpleTextInExHandle;
-    EFI_HANDLE                        SimpleTextInHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
-    EFI_SIMPLE_TEXT_INPUT_PROTOCOL    *SimpleTextIn;
     BOOLEAN                           Installed = FALSE;
     EFI_GUID                          gEfiCrscreenshotDxeGuid;
     EFI_HANDLE                        CrScreenHandle = NULL;
@@ -492,18 +433,6 @@ CrScreenshotDxeEntry (
     SimpleTextInExKeyStrokeRightShift.Key.UnicodeChar = 0;
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_SHIFT_PRESSED;
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyToggleState = 0;
-
-    // Set keystroke to be F2
-    SimpleTextInKeyStrokeF2.ScanCode = SCAN_F2;
-
-    // Set KeyStroke to be F4
-    SimpleTextInKeyStrokeF4.ScanCode = SCAN_F4;
-
-    // Set Keystroke to be F8
-    SimpleTextInKeyStrokeF8.ScanCode = SCAN_F8;
-
-    // Set Keystroke to be F10
-    SimpleTextInKeyStrokeF10.ScanCode = SCAN_F10;
     
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
@@ -604,56 +533,14 @@ CrScreenshotDxeEntry (
             }
 
             // Register Left key notification function
-            Status = SimpleTextInWaitForKeyStroke (
-                    SimpleTextIn,
-                    &SimpleTextInKeyStrokeF2,
+            Status = TimerSignal (
                     TakeScreenshot,
-                    &SimpleTextInHandle
                     );
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status);
+                Print (L"CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status);
             }
-            // Register Right key notification function
-            Status = SimpleTextInWaitForKeyStroke (
-                    SimpleTextIn,
-                    &SimpleTextInKeyStrokeF4,
-                    TakeScreenshot,
-                    &SimpleTextInHandle
-                    );
-            if (!EFI_ERROR (Status)) {
-                Installed = TRUE;
-            } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status);
-            }
-
-            // Register Left Shift key notification function
-            Status = SimpleTextInWaitForKeyStroke (
-                    SimpleTextIn,
-                    &SimpleTextInKeyStrokeF8,
-                    TakeScreenshot,
-                    &SimpleTextInHandle
-                    );
-            if (!EFI_ERROR (Status)) {
-                Installed = TRUE;
-            } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status);
-            }
-
-            // Register Right Shift key notification function
-            Status = SimpleTextInWaitForKeyStroke (
-                    SimpleTextIn,
-                    &SimpleTextInKeyStrokeF10,
-                    TakeScreenshot,
-                    &SimpleTextInHandle
-                    );
-            if (!EFI_ERROR (Status)) {
-                Installed = TRUE;
-            } else {
-                Print (L"CrScreenshotDxeEntry: SimpleTextInWaitForKeyStroke[%d] returned %r\n", Index, Status);
-            }
-        }
 
         // Show success only when we found at least one working implementation
         if (Installed)
