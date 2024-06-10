@@ -279,7 +279,8 @@ TakeScreenshot (
                 Status = CompareMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
-                    break;
+                    DEBUG((-1, "CompareMem: returned %r\n", Status));
+                    //break;
                 }
             }
 
