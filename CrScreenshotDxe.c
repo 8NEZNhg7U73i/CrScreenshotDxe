@@ -64,14 +64,14 @@ FindWritableFs (
             // Get protocol pointer for current volume
             Status = gBS->HandleProtocol(HandleBuffer[i], &gEfiSimpleFileSystemProtocolGuid, (VOID **) &SimpleFs);
             if (EFI_ERROR (Status)) {
-                DEBUG((0, "FindWritableFs: gBS->HandleProtocol[%d] returned %r\n", i, Status));
+                DEBUG((-1, "FindWritableFs: gBS->HandleProtocol[%d] returned %r\n", i, Status));
                 continue;
             }
             
             // Open the volume
             Status = SimpleFs->OpenVolume(SimpleFs, &Fs);
             if (EFI_ERROR (Status)) {
-                DEBUG((0, "FindWritableFs: SimpleFs->OpenVolume[%d] returned %r\n", i, Status));
+                DEBUG((-1, "FindWritableFs: SimpleFs->OpenVolume[%d] returned %r\n", i, Status));
                 continue;
             }
             
@@ -79,7 +79,7 @@ FindWritableFs (
             if (*WritableFs == NULL) {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
-                    DEBUG((0, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
+                    DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
                     continue;
                 }
                 
@@ -90,7 +90,7 @@ FindWritableFs (
             } else {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
-                    DEBUG((0, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
+                    DEBUG((-1, "FindWritableFs: Fs->Open[%d] returned %r\n", i, Status));
                     continue;
                 }
                 
@@ -132,7 +132,7 @@ ShowStatus (
     // Locate all instances of GOP
     EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
-        DEBUG((0, "ShowStatus: Graphics output protocol not found\n"));
+        DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
         return EFI_UNSUPPORTED;
     }
     
@@ -149,7 +149,7 @@ ShowStatus (
         // Handle protocol
         Status = gBS->HandleProtocol(HandleBuffer[i], &gEfiGraphicsOutputProtocolGuid, (VOID **) &GraphicsOutput);
         if (EFI_ERROR (Status)) {
-            DEBUG((0, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
+            DEBUG((-1, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
             continue;
         }
             
@@ -197,7 +197,7 @@ TakeScreenshot (
     // Find writable FS
     Status = FindWritableFs(&Fs);
     if (EFI_ERROR (Status)) {
-        DEBUG((0, "TakeScreenshot: Can't find writable FS\n"));
+        DEBUG((-1, "TakeScreenshot: Can't find writable FS\n"));
         ShowStatus(0xFF, 0xFF, 0x00); //Yellow
         return EFI_SUCCESS;
     }
@@ -205,7 +205,7 @@ TakeScreenshot (
     // Locate all instances of GOP
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiGraphicsOutputProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (EFI_ERROR (Status)) {
-        DEBUG((0, "ShowStatus: Graphics output protocol not found\n"));
+        DEBUG((-1, "ShowStatus: Graphics output protocol not found\n"));
         return EFI_SUCCESS;
     }
     
@@ -215,7 +215,7 @@ TakeScreenshot (
             // Handle protocol
             Status = gBS->HandleProtocol(HandleBuffer[i], &gEfiGraphicsOutputProtocolGuid, (VOID **) &GraphicsOutput);
             if (EFI_ERROR (Status)) {
-                DEBUG((0, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
+                DEBUG((-1, "ShowStatus: gBS->HandleProtocol[%d] returned %r\n", i, Status));
                 break;
             }
         
@@ -238,14 +238,14 @@ TakeScreenshot (
             // Allocate memory for screenshot
             Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&Image);
             if (EFI_ERROR(Status)) {
-                DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
+                DEBUG((-1, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
                 break;
             }
         
             // Take screenshot
             Status = GraphicsOutput->Blt(GraphicsOutput, Image, EfiBltVideoToBltBuffer, 0, 0, 0, 0, ScreenWidth, ScreenHeight, 0);
             if (EFI_ERROR(Status)) {
-                DEBUG((0, "TakeScreenshot: GraphicsOutput->Blt returned %r\n", Status));
+                DEBUG((-1, "TakeScreenshot: GraphicsOutput->Blt returned %r\n", Status));
                 break;
             }
             
@@ -255,15 +255,15 @@ TakeScreenshot (
                     break;
             }
             if (j == ImageSize) {
-                DEBUG((0, "TakeScreenshot: GraphicsOutput->Blt returned pitch black image, skipped\n"));
-                //ShowStatus(0x00, 0x00, 0xFF); //Blue
+                DEBUG((-1, "TakeScreenshot: GraphicsOutput->Blt returned pitch black image, skipped\n"));
+                ShowStatus(0x00, 0x00, 0xFF); //Blue
                 break;
             }
             
             // Open or create output file
             Status = Fs->Open(Fs, &File, FileName, EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
             if (EFI_ERROR (Status)) {
-                DEBUG((0, "TakeScreenshot: Fs->Open of %s returned %r\n", FileName, Status));
+                DEBUG((-1, "TakeScreenshot: Fs->Open of %s returned %r\n", FileName, Status));
                 break;
             }
             
@@ -286,15 +286,15 @@ TakeScreenshot (
             // Encode raw RGB image to PNG format
             j = lodepng_encode32(&PngFile, &PngFileSize, (CONST UINT8*)Image, ScreenWidth, ScreenHeight);
             if (j) {
-                DEBUG((0, "TakeScreenshot: lodepng_encode32 returned %d\n", j));
+                DEBUG((-1, "TakeScreenshot: lodepng_encode32 returned %d\n", j));
                 break;
             }
-            
+                
             // Write PNG image into the file and close it
             Status = File->Write(File, &PngFileSize, PngFile);
             File->Close(File);
             if (EFI_ERROR(Status)) {
-                DEBUG((0, "TakeScreenshot: File->Write returned %r\n", Status));
+                DEBUG((-1, "TakeScreenshot: File->Write returned %r\n", Status));
                 break;
             }
 
@@ -418,13 +418,16 @@ CrScreenshotDxeEntry (
     gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
 
     Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
-    if (EFI_ERROR (Status)) {
+    DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
+    if (!Status == EFI_SUCCESS){
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
-        if (!EFI_ERROR (Status)) {
-            DEBUG((0, "CrScreenshotDxeEntry: gBS->InstallMultipleProtocolInterfaces returned %r\n", Status));
+        DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
+        if (!Status == EFI_SUCCESS)
+        {
+            DEBUG((-1, "CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status));
         }
     } else {
-        DEBUG((0, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
+        DEBUG((-1, "CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status));
         return EFI_ALREADY_STARTED;
     }
     
@@ -457,7 +460,7 @@ CrScreenshotDxeEntry (
     SimpleTextInExKeyStrokeRightShift.Key.UnicodeChar = 0;
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_SHIFT_PRESSED;
     SimpleTextInExKeyStrokeRightShift.KeyState.KeyToggleState = 0;
-    
+
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
         // For each instance
@@ -466,7 +469,7 @@ CrScreenshotDxeEntry (
 
             // Get protocol handle
             if (EFI_ERROR (Status)) {
-               DEBUG((0, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status));
+               DEBUG ((-1, "CrScreenshotDxeEntry: gBS->HandleProtocol[%d] SimpleTextInputEx returned %r\n", Index, Status));
                continue;
             }
 
@@ -480,7 +483,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG((0, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register Right key notification function
@@ -493,7 +496,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG((0, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                DEBUG((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register key notification function
@@ -506,7 +509,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG((0, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register Left Shift key notification function
@@ -519,7 +522,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG((0, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
 
             // Register Right Shift key notification function
@@ -532,7 +535,7 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG((0, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
             }
         }
 
