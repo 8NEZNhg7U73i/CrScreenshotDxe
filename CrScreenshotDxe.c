@@ -359,8 +359,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         }
         // Print(L"ScanCode: %0X\n", Key.ScanCode);
     }
-    Status = gST->ConIn->Reset(gST->ConIn, FALSE);
-    Print(L"gST->ConIn->Reset: %r\n", Status);
+    Status = gBS->CloseEvent(gST->ConIn->WaitForKey);
+    Print(L"gBS->CloseEvent: %r\n", Status);
 }
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
