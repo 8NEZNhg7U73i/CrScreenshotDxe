@@ -373,7 +373,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
     static UINTN num = 0;
-    KeyFuncBuff *Buff = NULL;
+    static KeyFuncBuff *Buff = AllocateZeroPool(sizeof(KeyFuncBuff));
     Buff->ScanCode[num] = KeyInput->ScanCode;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
     Buff->num = num;
