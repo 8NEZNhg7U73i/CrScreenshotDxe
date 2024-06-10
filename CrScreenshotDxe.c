@@ -275,8 +275,8 @@ TakeScreenshot (
                 Image[j].Reserved = 0xFF;
             }
 
-            if (LastImageSize[i] == ImageSize[i]) {
-                Status = CompareMem(LastImage[i], Image[i], ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+            if (LastImageSize[i] == ImageSize) {
+                Status = CompareMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
                     DEBUG((-1, "CompareMem: returned %r\n", Status));
@@ -301,20 +301,20 @@ TakeScreenshot (
                 break;
             }
 
-            gBS->FreePool(LastImage);
-            Status = gBS->AllocatePool(EfiBootServicesData, ImageSize[i] * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&LastImage[i]);
+            gBS->FreePool(LastImage[i]);
+            Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&LastImage[i]);
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
                 break;
             }
 
-            CopyMem(LastImage[i], Image[i], ImageSize[i] * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+            CopyMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
                 break;
             }
 
-            LastImageSize[i] = ImageSize[i];
+            LastImageSize[i] = ImageSize;
 
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
