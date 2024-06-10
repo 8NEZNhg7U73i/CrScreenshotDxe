@@ -317,6 +317,8 @@ TakeScreenshot (
             }
             Print(L"3\n");
 
+            LastImageSize = ImageSize;
+            
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
         } while(0);
