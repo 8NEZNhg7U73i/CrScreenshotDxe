@@ -179,10 +179,6 @@ TakeScreenshot (
     EFI_FILE_PROTOCOL *Fs = NULL;
     EFI_FILE_PROTOCOL *File = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
-    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
-    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
-    UINTN      ImageSize;         // Size in pixels
-    static UINTN    LastImageSize = 0;
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
     EFI_STATUS Status;
@@ -209,6 +205,11 @@ TakeScreenshot (
         return EFI_SUCCESS;
     }
     
+    EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image[HandleCount] = {NULL};
+    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage[HandleCount] = {NULL};
+    UINTN      ImageSize[HandleCount];         // Size in pixels
+    static UINTN    LastImageSize[HandleCount] = 0;
+
     // For each GOP instance
     for (i = 0; i < HandleCount; i++) {
         do { // Break from do used instead of "goto error"
