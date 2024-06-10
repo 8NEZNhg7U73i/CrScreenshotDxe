@@ -21,6 +21,7 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABI
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
+#pragma optimize( "", off )
 
 #include <Uefi.h>
 #include <Library/UefiLib.h>
@@ -307,11 +308,53 @@ TakeScreenshot (
     return EFI_SUCCESS;
 }
 
+typedef struct KeyFuncBuffStruct{
+    EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
+} KeyFuncBuff;
+
+EFI_KEY_DATA EmptyKeyData;
+
+void emptykeydata ()
 {
+    EmptyKeyData.Key.ScanCode = 0;
+    EmptyKeyData.Key.UnicodeChar = 0;
+    EmptyKeyData.KeyState.KeyShiftState = 0;
+    EmptyKeyData.KeyState.KeyToggleState = 0;
+}
 
-    }
+BOOLEAN WaitForKeyBool;
+#define Timer 2 * 10 * 1000 * 1000
 
+void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
+{
+    if (!WaitForKeyBool){
+        WaitForKeyBool = TRUE;
+        KeyFuncBuff *Buff = Context;
+        (Buff->KeyNotificationFunction)(&EmptyKeyData);
+        WaitForKeyBool = FALSE;
     }
+}
+
+EFI_STATUS EFIAPI TimerSignal (
+    IN EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction
+    )
+{
+    EFI_EVENT TimeEvent;
+    EFI_STATUS Status;
+    KeyFuncBuff *Buff = NULL;
+    Buff->KeyNotificationFunction = KeyNotificationFunction;
+    Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
+    Print(L"Status: %r\n", Status);
+    if (EFI_ERROR (Status)) {
+        Print (L"gBS->CreateEvent Failed: %r\n", Status);
+        return Status;
+    }
+    Status = gBS->SetTimer(TimeEvent, TimerPeriodic, Timer);
+    if (EFI_ERROR (Status)) {
+        Print (L"gBS->SetTimer Failed: %r\n", Status);
+        return Status;
+    }
+    return EFI_SUCCESS;
 }
 
 EFI_STATUS
@@ -326,16 +369,70 @@ CrScreenshotDxeEntry (
     EFI_HANDLE                        *HandleBuffer = NULL;
     UINTN                             Index;
     EFI_KEY_DATA                      SimpleTextInExKeyStroke;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeft;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRight;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeLeftShift;
+    EFI_KEY_DATA                      SimpleTextInExKeyStrokeRightShift;
     EFI_HANDLE                        SimpleTextInExHandle;
     EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
     BOOLEAN                           Installed = FALSE;
+    EFI_GUID                          gEfiCrscreenshotDxeGuid;
+    EFI_HANDLE                        CrScreenHandle = NULL;
+    UINTN                             CrHandleCount = 0;
 
+    gEfiCrscreenshotDxeGuid.Data1 = 0x02e4e4f7;
+    gEfiCrscreenshotDxeGuid.Data2 = 0x38d9;
+    gEfiCrscreenshotDxeGuid.Data3 = 0x4924;
+    gEfiCrscreenshotDxeGuid.Data4[0] = 0xa4;
+    gEfiCrscreenshotDxeGuid.Data4[1] = 0xd7;
+    gEfiCrscreenshotDxeGuid.Data4[2] = 0xec;
+    gEfiCrscreenshotDxeGuid.Data4[3] = 0x6b;
+    gEfiCrscreenshotDxeGuid.Data4[4] = 0x69;
+    gEfiCrscreenshotDxeGuid.Data4[5] = 0x84;
+    gEfiCrscreenshotDxeGuid.Data4[6] = 0x7a;
+    gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
+
+    Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
+    if (EFI_ERROR (Status)) {
+        Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
+        if (!EFI_ERROR (Status)) {
+            Print (L"CrScreenshotDxeEntry: gBS->InstallMultipleProtocolInterfaces returned %r\n", Status);
+        }
+    } else {
+        Print (L"CrScreenshotDxeEntry: gBS->LocateProtocol return %r\n CrScreenShotDxe already loaded!\n", Status);
+        return EFI_ALREADY_STARTED;
+    }
+    
     // Set keystroke to be LCtrl+LAlt+F12
     SimpleTextInExKeyStroke.Key.ScanCode = SCAN_F12;
     SimpleTextInExKeyStroke.Key.UnicodeChar = 0;
     SimpleTextInExKeyStroke.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED | EFI_LEFT_ALT_PRESSED;
     SimpleTextInExKeyStroke.KeyState.KeyToggleState = 0;
 
+    // Set keystroke to be LCtrl+F2
+    SimpleTextInExKeyStrokeLeft.Key.ScanCode = SCAN_F2;
+    SimpleTextInExKeyStrokeLeft.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeLeft.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_CONTROL_PRESSED;
+    SimpleTextInExKeyStrokeLeft.KeyState.KeyToggleState = 0;
+
+    // Set keystroke to be RCtrl+F10
+    SimpleTextInExKeyStrokeRight.Key.ScanCode = SCAN_F10;
+    SimpleTextInExKeyStrokeRight.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeRight.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_CONTROL_PRESSED;
+    SimpleTextInExKeyStrokeRight.KeyState.KeyToggleState = 0;
+
+    // Set keystroke to be LShift+F4
+    SimpleTextInExKeyStrokeLeftShift.Key.ScanCode = SCAN_F4;
+    SimpleTextInExKeyStrokeLeftShift.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeLeftShift.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_LEFT_SHIFT_PRESSED;
+    SimpleTextInExKeyStrokeLeftShift.KeyState.KeyToggleState = 0;
+
+    // Set keystroke to be RShift+F8
+    SimpleTextInExKeyStrokeRightShift.Key.ScanCode = SCAN_F8;
+    SimpleTextInExKeyStrokeRightShift.Key.UnicodeChar = 0;
+    SimpleTextInExKeyStrokeRightShift.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID | EFI_RIGHT_SHIFT_PRESSED;
+    SimpleTextInExKeyStrokeRightShift.KeyState.KeyToggleState = 0;
+    
     Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
         // For each instance
@@ -348,6 +445,32 @@ CrScreenshotDxeEntry (
                continue;
             }
 
+            // Register Left key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeLeft,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+            }
+
+            // Register Right key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeRight,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+            }
+
             // Register key notification function
             Status = SimpleTextInEx->RegisterKeyNotify (
                     SimpleTextInEx,
@@ -358,19 +481,58 @@ CrScreenshotDxeEntry (
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
-                DEBUG ((-1, "CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status));
+                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
             }
 
-
-            }
-
-            }
-
+            // Register Left Shift key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeLeftShift,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
                     );
             if (!EFI_ERROR (Status)) {
                 Installed = TRUE;
             } else {
+                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
             }
+
+            // Register Right Shift key notification function
+            Status = SimpleTextInEx->RegisterKeyNotify (
+                    SimpleTextInEx,
+                    &SimpleTextInExKeyStrokeRightShift,
+                    TakeScreenshot,
+                    &SimpleTextInExHandle
+                    );
+            if (!EFI_ERROR (Status)) {
+                Installed = TRUE;
+            } else {
+                Print (L"CrScreenshotDxeEntry: SimpleTextInEx->RegisterKeyNotify[%d] returned %r\n", Index, Status);
+            }
+        }
+
+        // Show success only when we found at least one working implementation
+        if (Installed)
+        {
+            ShowStatus(0xFF, 0xFF, 0xFF); // White
+        }
+    }
+
+    if (Installed == FALSE) {
+        emptykeydata();
+
+        // Register time base notification function
+        Status = TimerSignal (TakeScreenshot);
+        if (!EFI_ERROR (Status)) {
+            Installed = TRUE;
+        } else {
+            Print (L"CrScreenshotDxeEntry: TimerSignal[%d] returned %r\n", Index, Status);
+        }
+
+        // Show success only when we found at least one working implementation
+        if (Installed)
+        {
+            ShowStatus(0x00, 0xFF, 0x00); // Green
         }
     }
 
@@ -379,10 +541,6 @@ CrScreenshotDxeEntry (
         gBS->FreePool(HandleBuffer);
     }
 
-    // Show success only when we found at least one working implementation
-    if (Installed) {
-        ShowStatus(0xFF, 0xFF, 0xFF); //White
-    }
-
     return EFI_SUCCESS;
 }
+#pragma optimize( "", on )
