@@ -281,7 +281,7 @@ TakeScreenshot (
                 if (Status == EFI_SUCCESS)
                 {
                     DEBUG((-1, "CompareMem: returned %r\n", Status));
-                    //break;
+                    break;
                 }
             }
 
