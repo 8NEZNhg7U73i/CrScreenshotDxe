@@ -342,18 +342,20 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //Print(L"Reset: %r\n", Status);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ReadKeyStroke: %r\n", Status);
-    if (Status == EFI_SUCCESS) {
-        //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-        for (Index = 0; Index < Buff->num; Index++) {
-            Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
-            if (Buff->ScanCode[num] == Key.ScanCode) {
+    // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+    for (Index = 0; Index < Buff->num; Index++)
+    {
+        Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
+        if (Status == EFI_SUCCESS)
+        {
+            if (Buff->ScanCode[num] == Key.ScanCode)
+            {
                 (Buff->KeyNotificationFunction)(&EmptyKeyData);
             }
         }
-        //Print(L"ScanCode: %0X\n", Key.ScanCode);
+        // Print(L"ScanCode: %0X\n", Key.ScanCode);
     }
 }
-
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
     IN EFI_SIMPLE_TEXT_INPUT_PROTOCOL *This,
