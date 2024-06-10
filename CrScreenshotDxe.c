@@ -182,6 +182,7 @@ TakeScreenshot (
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
     static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
     UINTN      ImageSize;         // Size in pixels
+    static     LastImageSize = 0;
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
     EFI_STATUS Status;
@@ -274,13 +275,13 @@ TakeScreenshot (
                 Image[j].Reserved = 0xFF;
             }
 
-            if (sizeof(Image) == sizeof(LastImage)) {
-                Status = CompareMem(&LastImage, &Image, sizeof(Image));
+            if (LastImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL) == ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL)) {
+                Status = CompareMem(&LastImage, &Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 Print(L"CompareMem: %0X\n", Status);
-                Print(L"sizeof(LastImage): %d\n", sizeof(&LastImage));
-                Print(L"sizeof(Image): %d\n", ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
-                if (!Status == EFI_SUCCESS)
+                if (Status == EFI_SUCCESS)
                 {
+                    Print(L"sizeof(LastImage): %d\n", sizeof(&LastImage));
+                    Print(L"sizeof(Image): %d\n", ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                     break;
                 }
             }
@@ -307,7 +308,7 @@ TakeScreenshot (
                 break;
             }
 
-            CopyMem(&LastImage, &Image, sizeof(Image));
+            CopyMem(&LastImage, &Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
                 break;
