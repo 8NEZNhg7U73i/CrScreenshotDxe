@@ -309,8 +309,9 @@ TakeScreenshot (
 }
 
 typedef struct KeyFuncBuffStruct{
-    UINT16 ScanCode;
+    UINT16 ScanCode[10];
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
+    UINT num;
 } KeyFuncBuff;
 
 EFI_KEY_DATA EmptyKeyData;
@@ -327,6 +328,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
+    UINTN Index = 0;
     //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     //Status = gBS->RaiseTPL(TPL_NOTIFY);
@@ -341,8 +343,11 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     Print(L"ReadKeyStroke: %r\n", Status);
     if (Status == EFI_SUCCESS) {
         //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-        if (Buff->ScanCode == Key.ScanCode) {
-            (Buff->KeyNotificationFunction)(&EmptyKeyData);
+        for (Index = 0; Index < Buff->num; Index++) {
+            Print(L"ScanCode set: %0X\n", Buff->ScanCode[num]);
+            if (Buff->ScanCode[num] == Key.ScanCode) {
+                (Buff->KeyNotificationFunction)(&EmptyKeyData);
+            }
         }
         //Print(L"ScanCode: %0X\n", Key.ScanCode);
     }
@@ -358,9 +363,11 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
 {
     EFI_EVENT TimeEvent;
     EFI_STATUS Status;
-    KeyFuncBuff *Buff = AllocateZeroPool(sizeof(KeyFuncBuff));
-    Buff->ScanCode = KeyInput->ScanCode;
+    static UINT num = 0;
+    KeyFuncBuff *Buff = NULL;
+    Buff->ScanCode[num] = KeyInput->ScanCode;
     Buff->KeyNotificationFunction = KeyNotificationFunction;
+    Buff->num = num;
     Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     Status = gBS->CreateEvent(EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_NOTIFY, (EFI_EVENT_NOTIFY)ReadKeyStroke, Buff, &TimeEvent);
     Print(L"Status: %r\n", Status);
@@ -374,6 +381,7 @@ EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
         Print (L"gBS->SetTimer Failed: %r\n", Status);
         return Status;
     }
+    num++;
     return EFI_SUCCESS;
 }
 
