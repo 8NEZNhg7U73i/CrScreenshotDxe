@@ -277,8 +277,8 @@ TakeScreenshot (
             if (sizeof(Image) == sizeof(LastImage)) {
                 Status = CompareMem(&LastImage, &Image, sizeof(Image));
                 Print(L"CompareMem: %0X\n", Status);
-                Print(L"sizeof(LastImage): %d\n", sizeof(*LastImage));
-                Print(L"sizeof(Image): %d\n", sizeof(*Image));
+                Print(L"sizeof(LastImage): %d\n", sizeof(&LastImage));
+                Print(L"sizeof(Image): %d\n", ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (!Status == EFI_SUCCESS)
                 {
                     break;
