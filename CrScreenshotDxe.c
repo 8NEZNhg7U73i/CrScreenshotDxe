@@ -336,10 +336,10 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     // EFI_EVENT event[1];
     // event[0] = gST->ConIn->WaitForKey;
     // UINTN num = 0;
+    UINTN Eventnum;
+    KeyFuncBuff *Buff = Context;
     (Buff->KeyNotificationFunction)(&EmptyKeyData);
     if (!WaitForKeyBool){
-        UINTN Eventnum;
-        KeyFuncBuff *Buff = Context;
         Status = gBS->RaiseTPL(TPL_APPLICATION);
         // Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
         // Print(L"Status: %r\n", Status);
