@@ -254,7 +254,7 @@ TakeScreenshot (
             }
             if (j == ImageSize) {
                 DEBUG((0, "TakeScreenshot: GraphicsOutput->Blt returned pitch black image, skipped\n"));
-                ShowStatus(0x00, 0x00, 0xFF); //Blue
+                //ShowStatus(0x00, 0x00, 0xFF); //Blue
                 break;
             }
             
