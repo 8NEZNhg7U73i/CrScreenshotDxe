@@ -299,7 +299,7 @@ TakeScreenshot (
 
             if (! &LastImage == NULL) {
                 gBS->FreePool(LastImage);
-                Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&Image);
+                Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&LastImage);
                 if (EFI_ERROR(Status)) {
                     DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
                     break;
