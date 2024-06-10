@@ -23,6 +23,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 #include <Uefi.h>
+#include <Library/UefiLib.h>
 #include <Library/DebugLib.h>
 #include <Library/PrintLib.h>
 #include <Library/UefiDriverEntryPoint.h>
@@ -30,9 +31,15 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/SimpleTextInEx.h>
+#include <Protocol/SimpleTextOut.h>
 #include <Protocol/SimpleFileSystem.h>
+#include <Library/MemoryAllocationLib.h>
+#include <Library/DevicePathLib.h>
+#include <Library/BaseMemoryLib.h>
 
 
+
+#include "lodepng.h" //PNG encoding library
 
 EFI_STATUS
 EFIAPI
