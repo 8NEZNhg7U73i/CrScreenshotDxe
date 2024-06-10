@@ -311,7 +311,7 @@ TakeScreenshot (
 typedef struct KeyFuncBuffStruct{
     UINT16 ScanCode[10];
     EFI_KEY_NOTIFY_FUNCTION KeyNotificationFunction;
-    UINT num;
+    UINTN num;
 } KeyFuncBuff;
 
 EFI_KEY_DATA EmptyKeyData;
