@@ -349,7 +349,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         Print(L"Buff->num: %d\n", Buff->num);
         if (Status == EFI_SUCCESS)
         {
-            if (Buff->ScanCode[num] == Key.ScanCode)
+            if (Buff->ScanCode[Index] == Key.ScanCode)
             {
                 (Buff->KeyNotificationFunction)(&EmptyKeyData);
             }
