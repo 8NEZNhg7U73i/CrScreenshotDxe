@@ -275,7 +275,7 @@ TakeScreenshot (
                 Image[j].Reserved = 0xFF;
             }
 
-            if (LastImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL) == ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL)) {
+            if (LastImageSize == ImageSize) {
                 Status = CompareMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
