@@ -330,7 +330,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_INPUT_KEY Key;
     UINTN Index = 0;
     EFI_EVENT event[1];
-    event[0] = gST->ConIn->ReadKeyStroke;
+    event[0] = gST->ConIn->WaitForKey;
     //UINTN num = 0;
     UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
