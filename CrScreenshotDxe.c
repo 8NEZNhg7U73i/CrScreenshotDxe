@@ -328,25 +328,25 @@ BOOLEAN WaitForKeyBool;
 
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
-    EFI_STATUS Status;
-    EFI_INPUT_KEY Key;
-    UINTN Index = 0;
-    //EFI_EVENT event[1];
-    //event[0] = gST->ConIn->WaitForKey;
-    //UINTN num = 0;
-    //UINTN Eventnum;
-    KeyFuncBuff *Buff = Context;
-    Status = gBS->RaiseTPL(TPL_APPLICATION);
-    //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
-    //Print(L"Status: %r\n", Status);
-    //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    //Status = gBS->CheckEvent(gST->ConIn->WaitForKey);
-    //Print(L"ScanCode: %0X\n", Key.ScanCode);
-    //Status = gST->ConIn->Reset(gST->ConIn, FALSE);
-    //Print(L"Reset: %r\n", Status);
     if (!WaitForKeyBool){
+        EFI_STATUS Status;
+        EFI_INPUT_KEY Key;
+        UINTN Index = 0;
+        // EFI_EVENT event[1];
+        // event[0] = gST->ConIn->WaitForKey;
+        // UINTN num = 0;
+        UINTN Eventnum;
+        KeyFuncBuff *Buff = Context;
+        Status = gBS->RaiseTPL(TPL_APPLICATION);
+        // Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
+        // Print(L"Status: %r\n", Status);
+        // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+        // Status = gBS->CheckEvent(gST->ConIn->WaitForKey);
+        // Print(L"ScanCode: %0X\n", Key.ScanCode);
+        // Status = gST->ConIn->Reset(gST->ConIn, FALSE);
+        // Print(L"Reset: %r\n", Status);
         WaitForKeyBool = TRUE;
-        Status = gBS->WaitForEvent(1, event, &Eventnum);
+        Status = gBS->WaitForEvent(1, gST->ConIn->WaitForKey, &Eventnum);
         Print(L"gBS->WaitForEvent: %r\n", Status);
         Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
         Print(L"ReadKeyStroke: %r\n", Status);
