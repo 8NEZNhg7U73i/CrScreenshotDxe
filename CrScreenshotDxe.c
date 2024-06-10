@@ -276,7 +276,7 @@ TakeScreenshot (
             }
 
             if (LastImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL) == ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL)) {
-                Status = CompareMem(&LastImage, &Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+                Status = CompareMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 Print(L"CompareMem: %0X\n", Status);
                 if (Status == EFI_SUCCESS)
                 {
@@ -310,7 +310,7 @@ TakeScreenshot (
             }
             Print(L"2\n");
 
-            CopyMem(&LastImage, &Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+            CopyMem(LastImage, Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
                 break;
