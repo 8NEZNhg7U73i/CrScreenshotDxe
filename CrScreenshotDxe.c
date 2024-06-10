@@ -153,6 +153,7 @@ ShowStatus (
             continue;
         }
             
+        Print(L"i: %d\n", i);
         // Backup current image
         GraphicsOutput->Blt(GraphicsOutput, Backup, EfiBltVideoToBltBuffer, 0, 0, 0, 0, STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
         
