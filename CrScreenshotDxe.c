@@ -288,7 +288,8 @@ TakeScreenshot (
                 Print (L"TakeScreenshot: File->Write returned %r\n", Status);
                 break;
             }
-            
+            Print(L"i: %d\n", i);
+
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
         } while(0);
