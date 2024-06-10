@@ -303,8 +303,8 @@ TakeScreenshot (
                 DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
                 break;
             }
-            
-            Status = CopyMem(&LastImage, &Image, sizeof(Image));
+
+            CopyMem(&LastImage, &Image, sizeof(Image));
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
                 break;
