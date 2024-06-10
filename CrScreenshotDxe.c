@@ -343,7 +343,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ReadKeyStroke: %r\n", Status);
     // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    for (Index = 0; Index < Buff->num; Index++)
+    for (Index = 0; Index <= Buff->num; Index++)
     {
         Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
         Print(L"Buff->num: %d\n", Buff->num);
