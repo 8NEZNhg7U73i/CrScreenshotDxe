@@ -324,15 +324,17 @@ void emptykeydata ()
     EmptyKeyData.KeyState.KeyToggleState = 0;
 }
 
+BOOLEAN WaitForKeyBool;
+
 void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
 {
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
     UINTN Index = 0;
-    EFI_EVENT event[1];
-    event[0] = gST->ConIn->WaitForKey;
+    //EFI_EVENT event[1];
+    //event[0] = gST->ConIn->WaitForKey;
     //UINTN num = 0;
-    UINTN Eventnum;
+    //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     Status = gBS->RaiseTPL(TPL_APPLICATION);
     //Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
@@ -342,27 +344,31 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
     //Status = gST->ConIn->Reset(gST->ConIn, FALSE);
     //Print(L"Reset: %r\n", Status);
-    Status = gBS->WaitForEvent(1, event, &Eventnum);
-    Print(L"gBS->WaitForEvent: %r\n", Status);
-    Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
-    Print(L"ReadKeyStroke: %r\n", Status);
-    // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
-    for (Index = 0; Index <= Buff->num; Index++)
-    {
-        Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
-        Print(L"Buff->num: %d\n", Buff->num);
-        if (Status == EFI_SUCCESS)
+    if (!WaitForKeyBool){
+        WaitForKeyBool = TRUE;
+        Status = gBS->WaitForEvent(1, event, &Eventnum);
+        Print(L"gBS->WaitForEvent: %r\n", Status);
+        Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
+        Print(L"ReadKeyStroke: %r\n", Status);
+        // Print(L"ScanCode set: %0X\n", Buff->ScanCode);
+        for (Index = 0; Index <= Buff->num; Index++)
         {
-            if (Buff->ScanCode[Index] == Key.ScanCode)
+            Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
+            Print(L"Buff->num: %d\n", Buff->num);
+            if (Status == EFI_SUCCESS)
             {
-                (Buff->KeyNotificationFunction)(&EmptyKeyData);
-                break;
+                if (Buff->ScanCode[Index] == Key.ScanCode)
+                {
+                    (Buff->KeyNotificationFunction)(&EmptyKeyData);
+                    break;
+                }
             }
+            // Print(L"ScanCode: %0X\n", Key.ScanCode);
         }
-        // Print(L"ScanCode: %0X\n", Key.ScanCode);
+        WaitForKeyBool = FALSE;
+        // Status = gBS->CloseEvent(Event);
+        // Print(L"gBS->CloseEvent: %r\n", Status);
     }
-    Status = gBS->CloseEvent(Event);
-    Print(L"gBS->CloseEvent: %r\n", Status);
 }
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
