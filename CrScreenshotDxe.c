@@ -338,8 +338,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //Print(L"ScanCode set: %0X\n", Buff->ScanCode);
     //Status = gBS->CheckEvent(gST->ConIn->WaitForKey);
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
-    Status = gST->ConIn->Reset(gST->ConIn, FALSE);
-    Print(L"Reset: %r\n", Status);
+    //Status = gST->ConIn->Reset(gST->ConIn, FALSE);
+    //Print(L"Reset: %r\n", Status);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ReadKeyStroke: %r\n", Status);
     if (Status == EFI_SUCCESS) {
