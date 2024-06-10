@@ -329,6 +329,8 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
     UINTN Index = 0;
+    EFI_EVENT event[1];
+    event[0] = gST->ConIn->WaitForKey;
     //UINTN num = 0;
     UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
@@ -340,7 +342,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     //Print(L"ScanCode: %0X\n", Key.ScanCode);
     //Status = gST->ConIn->Reset(gST->ConIn, FALSE);
     //Print(L"Reset: %r\n", Status);
-    Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
+    Status = gBS->WaitForEvent(1, &event, &Eventnum);
     Print(L"gBS->WaitForEvent: %r\n", Status);
     Status = gST->ConIn->ReadKeyStroke (gST->ConIn, &Key);
     Print(L"ReadKeyStroke: %r\n", Status);
@@ -359,7 +361,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         }
         // Print(L"ScanCode: %0X\n", Key.ScanCode);
     }
-    Status = gBS->CloseEvent(gST->ConIn->WaitForKey);
+    Status = gBS->CloseEvent(event);
     Print(L"gBS->CloseEvent: %r\n", Status);
 }
 
