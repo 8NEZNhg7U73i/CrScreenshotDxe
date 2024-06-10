@@ -276,9 +276,9 @@ TakeScreenshot (
 
             if (sizeof(Image) == sizeof(LastImage)) {
                 Status = CompareMem(&LastImage, &Image, sizeof(Image));
+                Print(L"CompareMem: %0X\n", Status);
                 if (Status == EFI_SUCCESS)
                 {
-                    Print(L"CompareMem: %0X\n", Status);
                     break;
                 }
             }
