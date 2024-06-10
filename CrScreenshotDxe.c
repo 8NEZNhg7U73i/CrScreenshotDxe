@@ -98,7 +98,7 @@ FindWritableFs (
                 // *WritableFs = Fs;
                 Fs->Delete(File);
                 Status = EFI_ABORTED;
-                return Status;
+                break;
             }
         }
     }
@@ -280,6 +280,7 @@ TakeScreenshot (
                 if (Status == EFI_SUCCESS)
                 {
                     DEBUG((-1, "CompareMem: returned %r\n", Status));
+                    Print(L"CompareMem: returned %r\n", Status);
                     break;
                 }
             }
