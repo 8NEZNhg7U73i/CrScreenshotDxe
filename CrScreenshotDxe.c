@@ -98,7 +98,7 @@ FindWritableFs (
                 // *WritableFs = Fs;
                 Fs->Delete(File);
                 Status = EFI_ABORTED;
-                break;
+                return Status;
             }
         }
     }
