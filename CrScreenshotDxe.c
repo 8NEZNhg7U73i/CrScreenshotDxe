@@ -302,17 +302,20 @@ TakeScreenshot (
             }
 
             gBS->FreePool(LastImage);
+            Print(L"1\n");
             Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&LastImage);
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: gBS->AllocatePool returned %r\n", Status));
                 break;
             }
+            Print(L"2\n");
 
             CopyMem(&LastImage, &Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
             if (EFI_ERROR(Status)) {
                 DEBUG((0, "TakeScreenshot: CopyMem returned %r\n", Status));
                 break;
             }
+            Print(L"3\n");
 
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
