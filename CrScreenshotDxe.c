@@ -346,7 +346,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
         // Status = gST->ConIn->Reset(gST->ConIn, FALSE);
         // Print(L"Reset: %r\n", Status);
         WaitForKeyBool = TRUE;
-        Status = gBS->WaitForEvent(1, gST->ConIn->WaitForKey, &Eventnum);
+        Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Eventnum);
         Print(L"gBS->WaitForEvent: %r\n", Status);
         Status = gST->ConIn->ReadKeyStroke(gST->ConIn, &Key);
         Print(L"ReadKeyStroke: %r\n", Status);
