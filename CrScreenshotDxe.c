@@ -352,10 +352,12 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
             if (Buff->ScanCode[Index] == Key.ScanCode)
             {
                 (Buff->KeyNotificationFunction)(&EmptyKeyData);
+                break;
             }
         }
         // Print(L"ScanCode: %0X\n", Key.ScanCode);
     }
+    Status = gST->ConIn->Reset(gST->ConIn, FALSE);
 }
 
 EFI_STATUS EFIAPI SimpleTextInWaitForKeyStroke (
