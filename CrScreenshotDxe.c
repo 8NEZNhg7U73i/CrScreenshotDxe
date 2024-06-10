@@ -329,6 +329,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     EFI_STATUS Status;
     EFI_INPUT_KEY Key;
     UINTN Index = 0;
+    UINTN num = 0;
     //UINTN Eventnum;
     KeyFuncBuff *Buff = Context;
     //Status = gBS->RaiseTPL(TPL_NOTIFY);
