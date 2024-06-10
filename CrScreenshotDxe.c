@@ -169,7 +169,6 @@ ShowStatus (
     return EFI_SUCCESS;
 }
 
-EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
 
 EFI_STATUS
 EFIAPI
@@ -181,6 +180,7 @@ TakeScreenshot (
     EFI_FILE_PROTOCOL *File = NULL;
     EFI_GRAPHICS_OUTPUT_PROTOCOL  *GraphicsOutput = NULL;
     EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
+    static EFI_GRAPHICS_OUTPUT_BLT_PIXEL *LastImage = NULL;
     UINTN      ImageSize;         // Size in pixels
     UINT8      *PngFile = NULL;
     UINTN      PngFileSize;       // Size in bytes
@@ -296,7 +296,7 @@ TakeScreenshot (
                 DEBUG((0, "TakeScreenshot: File->Write returned %r\n", Status));
                 break;
             }
-            
+
             if (! &LastImage == NULL) {
                 gBS->FreePool(LastImage);
                 Status = gBS->AllocatePool(EfiBootServicesData, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL), (VOID **)&Image);
