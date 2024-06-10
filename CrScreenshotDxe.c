@@ -346,6 +346,7 @@ void ReadKeyStroke (IN EFI_EVENT Event, IN VOID *Context)
     for (Index = 0; Index < Buff->num; Index++)
     {
         Print(L"ScanCode set: %0X\n", Buff->ScanCode[Index]);
+        Print(L"Buff->num: %d\n", Buff->num);
         if (Status == EFI_SUCCESS)
         {
             if (Buff->ScanCode[num] == Key.ScanCode)
