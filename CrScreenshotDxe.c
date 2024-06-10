@@ -314,6 +314,7 @@ TakeScreenshot (
             }
 
             LastImageSize = ImageSize;
+            Print(L"i: %d\n", i);
 
             // Show success
             ShowStatus(0x00, 0xFF, 0x00); //Green
