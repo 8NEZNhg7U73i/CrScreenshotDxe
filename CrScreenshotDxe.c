@@ -272,13 +272,6 @@ TakeScreenshot (
                 break;
             }
             
-            // Open or create output file
-            Status = Fs->Open(Fs, &File, FileName, EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
-            if (EFI_ERROR (Status)) {
-                //Print(L"TakeScreenshot: Fs->Open of %s returned %r\n", FileName, Status);
-                break;
-            }
-            
             // Convert BGR to RGBA with Alpha set to 0xFF
             for (j = 0; j < ImageSize; j++) {
                 UINT8 Temp = Image[j].Blue;
@@ -291,7 +284,6 @@ TakeScreenshot (
                 Status = CompareMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
-                    Fs->Delete(File);
                     //Print(L"CompareMem: returned %r\n", Status);
                     break;
                 }
@@ -301,11 +293,17 @@ TakeScreenshot (
             // Encode raw RGB image to PNG format
             j = lodepng_encode32(&PngFile, &PngFileSize, (CONST UINT8*)Image, ScreenWidth, ScreenHeight);
             if (j) {
-                Fs->Delete(File);
                 //Print(L"TakeScreenshot: lodepng_encode32 returned %d\n", j);
                 break;
             }
-                
+
+            // Open or create output file
+            Status = Fs->Open(Fs, &File, FileName, EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
+            if (EFI_ERROR (Status)) {
+                //Print(L"TakeScreenshot: Fs->Open of %s returned %r\n", FileName, Status);
+                break;
+            }
+            
             // Write PNG image into the file and close it
             Status = File->Write(File, &PngFileSize, PngFile);
             File->Close(File);
