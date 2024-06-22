@@ -276,7 +276,7 @@ TakeScreenshot (
             }
 
             if (LastImageSize[i] == ImageSize) {
-                Status = CompareMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
+                Status = CompareMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
                     Print(L"CompareMem: returned %r\n", Status);
@@ -307,7 +307,7 @@ TakeScreenshot (
                 break;
             }
 
-            CopyMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL);
+            CopyMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
             if (EFI_ERROR(Status)) {
                 Print(L"TakeScreenshot: CopyMem returned %r\n", Status);
                 break;
@@ -419,7 +419,7 @@ CrScreenshotDxeEntry (
     gEfiCrscreenshotDxeGuid.Data4[6] = 0x7a;
     gEfiCrscreenshotDxeGuid.Data4[7] = 0xa3;
 
-    Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle);
+    Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiCrscreenshotDxeGuid, NULL, &CrHandleCount, &(&CrScreenHandle));
     Print(L"CrScreenshotDxeEntry: gBS->InstallProtocolInterface returned %r\n", Status);
     if (!Status == EFI_SUCCESS){
         Status = gBS->InstallMultipleProtocolInterfaces(&CrScreenHandle, &gEfiCrscreenshotDxeGuid, NULL, NULL);
