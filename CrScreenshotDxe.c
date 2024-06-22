@@ -268,7 +268,6 @@ TakeScreenshot (
             }
             if (j == ImageSize) {
                 //Print(L"TakeScreenshot: GraphicsOutput->Blt returned pitch black image, skipped\n");
-                //ShowStatus(0x00, 0x00, 0xFF); //Blue
                 break;
             }
             
@@ -574,7 +573,7 @@ CrScreenshotDxeEntry (
         // Show success only when we found at least one working implementation
         if (Installed)
         {
-            ShowStatus(0x00, 0xFF, 0xFF); // Green
+            ShowStatus(0x00, 0x00, 0xFF); // Blue
         }
     }
 
