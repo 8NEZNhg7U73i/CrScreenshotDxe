@@ -291,6 +291,7 @@ TakeScreenshot (
                 Status = CompareMem(LastImage[i], Image, ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
                 if (Status == EFI_SUCCESS)
                 {
+                    Fs->Delete(File);
                     //Print(L"CompareMem: returned %r\n", Status);
                     break;
                 }
