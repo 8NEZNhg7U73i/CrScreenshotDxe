@@ -562,7 +562,7 @@ CrScreenshotDxeEntry (
         // Show success only when we found at least one working implementation
         if (Installed)
         {
-            ShowStatus(0x00, 0xFF, 0x00); // Green
+            ShowStatus(0x00, 0xFF, 0xFF); // Green
         }
     }
 
