@@ -283,7 +283,7 @@ TakeScreenshot (
                     break;
                 }
             }
-            Print(L"CompareMem: returned %r\n", Status);
+            //Print(L"CompareMem: returned %r\n", Status);
 
             // Encode raw RGB image to PNG format
             j = lodepng_encode32(&PngFile, &PngFileSize, (CONST UINT8*)Image, ScreenWidth, ScreenHeight);
