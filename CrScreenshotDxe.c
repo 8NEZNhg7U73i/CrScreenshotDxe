@@ -51,9 +51,11 @@ FindWritableFs (
     EFI_HANDLE *HandleBuffer = NULL;
     UINTN      HandleCount;
     UINTN      i;
+    EFI_STATUS Status;
+    EFI_STATUS FsStatus = EFI_ABORTED;
     
     // Locate all the simple file system devices in the system
-    EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiSimpleFileSystemProtocolGuid, NULL, &HandleCount, &HandleBuffer);
+    Status = gBS->LocateHandleBuffer(ByProtocol, &gEfiSimpleFileSystemProtocolGuid, NULL, &HandleCount, &HandleBuffer);
     if (!EFI_ERROR (Status)) {
         EFI_FILE_PROTOCOL *Fs = NULL;
         // For each located volume
@@ -87,7 +89,7 @@ FindWritableFs (
                 *WritableFs = Fs;
                 Fs->Delete(File);
                 Print(L"FindWritableFs: Fs->Open[%d] returned %r\n", i, Status);
-                Status = EFI_SUCCESS;
+                FsStatus = EFI_SUCCESS;
             } else {
                 Status = Fs->Open(Fs, &File, L"screenshot\\crsdtest.fil", EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
                 if (EFI_ERROR (Status)) {
@@ -98,7 +100,7 @@ FindWritableFs (
                 // Writable FS found
                 // *WritableFs = Fs;
                 Fs->Delete(File);
-                Status = EFI_ABORTED;
+                FsStatus = EFI_ABORTED;
                 Print(L"FindWritableFs: Fs->Open[%d] returned %r\n", i, Status);
                 break;
             }
@@ -110,7 +112,7 @@ FindWritableFs (
         gBS->FreePool(HandleBuffer);
     }
     
-    return Status;
+    return FsStatus;
 }
 
 EFI_STATUS
