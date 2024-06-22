@@ -301,6 +301,7 @@ TakeScreenshot (
             // Encode raw RGB image to PNG format
             j = lodepng_encode32(&PngFile, &PngFileSize, (CONST UINT8*)Image, ScreenWidth, ScreenHeight);
             if (j) {
+                Fs->Delete(File);
                 //Print(L"TakeScreenshot: lodepng_encode32 returned %d\n", j);
                 break;
             }
