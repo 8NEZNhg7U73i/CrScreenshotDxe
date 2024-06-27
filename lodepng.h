@@ -28,7 +28,7 @@ freely, subject to the following restrictions:
 #ifndef LODEPNG_H
 #define LODEPNG_H
 
-//#ifdef LODEPNG_UEFI_MODE
+#ifdef LODEPNG_UEFI_MODE
 
 #include <Uefi.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -56,9 +56,10 @@ typedef INT8   int8_t;
 void* lodepng_malloc(size_t size);
 void* lodepng_realloc(void* ptr, size_t new_size);
 void lodepng_free(void* ptr);
-//#else
-//#include <string.h> /*for size_t*/
-//#endif
+
+#else
+#include <string.h> /*for size_t*/
+#endif
 
 
 extern const char* LODEPNG_VERSION_STRING;
