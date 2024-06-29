@@ -419,7 +419,7 @@ CrScreenshotDxeEntry (
     UINTN                             CrHandleCount = 0;
 
 gEfiCrscreenshotDxeGuid = { 0x02e4e4f7, 0x38d9, 0x4924, { 0xa4, 0xd7, 0xec, 0x6b, 0x69, 0x84, 0x7a, 0xa3 } };
-EFI_GUID gEfiCrscreenshotDxeGuid;
+//EFI_GUID gEfiCrscreenshotDxeGuid;
 /*
     gEfiCrscreenshotDxeGuid.Data1 = 0x02e4e4f7;
     gEfiCrscreenshotDxeGuid.Data2 = 0x38d9;
